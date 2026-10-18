@@ -480,6 +480,9 @@
       dialog::backdrop {
         background: #102b4070;
       }
+      dialog:has(#guideFrame) {
+        width: min(1200px, 96vw);
+      }
       dialog .close {
         float: right;
       }
@@ -1450,10 +1453,12 @@
           };
         }
         function help() {
+          const guide = document.getElementById('user-guide-data');
           modal(
-            '从拖拽布局到后续制作',
-            `<h3>新增 教程与长期项目</h3><p>用“教程预览”查看随当前布局更新的完整教程；用“生成当前版本教程”固定快照并导出 HTML，再打印为 PDF。长期继续设计请用“保存完整项目”导出 *.keyboard-project.json，保留版本、人工内容与确认记录。</p><h3>1 先确定外观</h3><p>默认是教程原始功能关系的示意布局，所有组件尺寸均待确认。拖动组件；拖上方圆点旋转，右下方方块缩放；右侧可精确输入中心坐标、宽高和角度。支持键盘方向键、R、Delete 和 Ctrl D。圆形尺寸为直径。</p><h3>2 查看变化和间距</h3><p>用顶部下拉框叠加原始布局，虚线为基准。选中组件可看最近四个外包络净距；画布虚线连接中心，但标注的是外包络净距。红色提示重叠或越界，最小净距在左侧设置。碰撞只按二维外包络计算，不替代焊盘、手部空间、模块高度和外壳干涉检查。</p><h3>3 保存和恢复</h3><p>“导出布局 JSON”下载统一输入文件；“打开 JSON”重新载入并计算改版影响。“恢复原始基准”可以撤销。Ctrl Z 撤销，Ctrl Shift Z 或 Ctrl Y 重做。浏览器自动草稿只是补充；file:// 存储可能被限制，请总是导出 JSON。</p><h3>4 电气映射独立于位置</h3><p>原组件的 ID、矩阵位置、GPIO 和四层键码跟随组件移动。新增或复制的输入不自动抢占原脚位，需在属性或全局设置里分配。空矩阵交点可能容纳新键，不必默认增加 GPIO。新增 OLED 可共享已有 I²C 总线，但必须确认地址、电平和驱动支持。</p><h3>5 查看改版步骤</h3><p>右侧“改版分析”按 PCB、原理图、矩阵、GPIO、外壳、定位板、BOM、QMK 分类，区分必须修改、重新验证与可保持。原设计问题单独保留，不会因位置未变就被视为已解决。</p><h3>以后发什么给我</h3><p>只交换布局时可发送 <b>*.layout.json</b>；长期继续制作优先发送 <b>*.keyboard-project.json</b>，它还保留教程、版本与人工内容。日常模板教程可直接离线生成。缺少真实规格时，我会据待确认项补齐方案，而不会把这个草案直接当作可加工文件。</p><p class="notice">这里不会输出 PCB Gerber、外壳加工图或可直接刷写的固件。是否可制作必须在 CAD / EDA / QMK 中用真实数据验证。</p>`,
+            '统一图文使用指南',
+            '<iframe id="guideFrame" title="统一图文使用指南" style="width:100%;height:64vh;border:0" sandbox="allow-scripts allow-same-origin allow-modals"></iframe>',
           );
+          document.getElementById('guideFrame').srcdoc = JSON.parse(guide.textContent);
         }
         function screenPoint(ev) {
           const svg = $('canvas'),

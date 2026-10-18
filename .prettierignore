@@ -3,6 +3,7 @@ node_modules/
 package-lock.json
 键盘布局编辑器.html
 当前设计示例教程.html
+使用说明图文版.html
 *.keyboard-project.json
 *.layout.json
 layout.schema.json

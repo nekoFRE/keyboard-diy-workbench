@@ -2,6 +2,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 const C = require('./core.js');
 const out = path.dirname(__dirname);
+require('node:child_process').execFileSync(
+  process.execPath,
+  [path.join(__dirname, 'build-guide.cjs')],
+  { stdio: 'inherit' },
+);
+const userGuide = fs.readFileSync(path.join(out, '使用说明图文版.html'), 'utf8');
 const library = {
   ...JSON.parse(fs.readFileSync(path.join(__dirname, '教程章节.json'), 'utf8')),
   ...JSON.parse(fs.readFileSync(path.join(__dirname, '教程图片.json'), 'utf8')),
@@ -14,6 +20,9 @@ const additions =
   fs.readFileSync(path.join(__dirname, 'studio.css'), 'utf8') +
   '</style><script type="application/json" id="tutorial-library-data">' +
   JSON.stringify(library).replace(/</g, '\\u003c') +
+  '</script>' +
+  '<script type="application/json" id="user-guide-data">' +
+  JSON.stringify(userGuide).replace(/</g, '\\u003c') +
   '</script>' +
   ['project-core.js', 'tutorial-engine.js', 'project-ui.js']
     .map(
