@@ -1,0 +1,16 @@
+node_modules/
+.git/
+package-lock.json
+键盘布局编辑器.html
+当前设计示例教程.html
+*.keyboard-project.json
+*.layout.json
+layout.schema.json
+project.schema.json
+_开发/教程图片.json
+_开发/tutorial-library.json
+_开发/升级前备份/
+_开发/测试输出/
+_开发/浏览器验证结果.json
+_开发/*.png
+_开发/*.zip

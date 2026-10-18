@@ -1,0 +1,27 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+__pycache__/
+.venv/
+_开发/升级前备份/
+_开发/测试输出/
+_开发/tutorial-library.json
+_开发/界面-*.png
+_开发/浏览器导出验证.layout.json
+_开发/浏览器验证结果.json
+_开发/zip-core-test.zip
+playwright-report/
+test-results/
+# 将个人项目、加工文件与导出包放在这里，避免误提交。
+我的项目/
+工程文件/
+交付包/
+*.keyboard-project.json
+!示例项目.keyboard-project.json
+*.layout.json
+!原始基准.layout.json
+!修改示例.layout.json

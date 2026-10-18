@@ -1,0 +1,22 @@
+{
+  "name": "keyboard-diy-workbench",
+  "version": "2.0.0",
+  "private": true,
+  "description": "本地离线键盘布局设计、持续关联教程与制作交付管理工具",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node _开发/build.cjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "pretest": "npm run build",
+    "test": "node --test _开发/core.test.cjs _开发/project.test.cjs",
+    "test:browser": "node _开发/browser.test.cjs && node _开发/studio.browser.test.cjs",
+    "check": "npm run format:check && npm test && npm run test:browser"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1",
+    "prettier": "3.9.10"
+  }
+}

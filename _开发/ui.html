@@ -1,0 +1,1767 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>键盘布局工作台</title>
+    <style>
+      :root {
+        --ink: #172c38;
+        --muted: #687d88;
+        --line: #dbe3e8;
+        --teal: #087e83;
+        --light: #e9f5f2;
+        --orange: #a76617;
+        --red: #b63f47;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font:
+          14px/1.5 system-ui,
+          'Microsoft YaHei',
+          sans-serif;
+        color: var(--ink);
+        background: #f2f5f7;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        padding: 7px 11px;
+        background: white;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+      button:hover {
+        background: #edf4f5;
+        border-color: #91b3bc;
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .primary {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: white;
+      }
+      .primary:hover {
+        background: #006e73;
+        color: white;
+      }
+      .danger {
+        color: var(--red);
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        min-width: 0;
+        border: 1px solid #ccd8df;
+        border-radius: 6px;
+        background: white;
+        padding: 6px 8px;
+        color: var(--ink);
+      }
+      input[type='checkbox'] {
+        width: auto;
+        accent-color: var(--teal);
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: 2px solid #8ac9cb;
+        outline-offset: 1px;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 62px;
+      }
+      label {
+        display: block;
+        color: #4d6572;
+        font-size: 12px;
+      }
+      label input,
+      label select,
+      label textarea {
+        display: block;
+        margin-top: 4px;
+      }
+      label.check {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+      }
+      label.check input {
+        margin: 0;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 13px 20px;
+        background: #183746;
+        color: white;
+      }
+      header h1 {
+        font-size: 19px;
+        letter-spacing: 1px;
+        margin: 0;
+      }
+      header .sub {
+        font-size: 12px;
+        color: #b8cfd9;
+      }
+      header .actions {
+        margin-left: auto;
+        display: flex;
+        gap: 7px;
+      }
+      header button {
+        background: #294c5c;
+        border-color: #456575;
+        color: white;
+      }
+      header .primary {
+        background: #d3eee3;
+        color: #143e3d;
+        border-color: #d3eee3;
+      }
+      .topbar {
+        padding: 8px 16px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        background: white;
+        border-bottom: 1px solid var(--line);
+        flex-wrap: wrap;
+      }
+      .topbar select {
+        width: auto;
+        padding: 4px 6px;
+      }
+      .topbar .right {
+        margin-left: auto;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .workspace {
+        height: calc(100vh - 135px);
+        min-height: 660px;
+        display: grid;
+        grid-template-columns: 210px minmax(360px, 1fr) 350px;
+        gap: 0;
+      }
+      .left,
+      .rightpanel {
+        background: white;
+        overflow: auto;
+      }
+      .left {
+        border-right: 1px solid var(--line);
+        padding: 17px 14px;
+      }
+      .rightpanel {
+        border-left: 1px solid var(--line);
+      }
+      h2 {
+        font-size: 14px;
+        margin: 0 0 12px;
+      }
+      h3 {
+        font-size: 13px;
+        margin: 17px 0 8px;
+      }
+      .palette {
+        display: grid;
+        gap: 7px;
+      }
+      .palette button {
+        text-align: left;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 11px;
+      }
+      .glyph {
+        display: inline-grid;
+        place-items: center;
+        width: 26px;
+        height: 26px;
+        background: #e8f3ef;
+        border: 1px solid #afcfc7;
+        border-radius: 5px;
+        font-size: 18px;
+      }
+      .glyph.round {
+        border-radius: 50%;
+        background: #e8edf8;
+        border-color: #bcc9df;
+      }
+      .glyph.screen {
+        background: #173542;
+        color: #d6f4e9;
+        border-color: #173542;
+      }
+      .hint {
+        font-size: 12px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+      .fieldgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+        margin: 9px 0;
+      }
+      .stack {
+        display: grid;
+        gap: 9px;
+      }
+      .canvasarea {
+        position: relative;
+        min-width: 0;
+        min-height: 440px;
+        overflow: hidden;
+        background: #edf2f5;
+      }
+      .canvasarea svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+        touch-action: none;
+        user-select: none;
+      }
+      .canvasarea .canvasnote {
+        position: absolute;
+        left: 16px;
+        top: 13px;
+        pointer-events: none;
+        font-size: 12px;
+        color: #516f7d;
+        background: #fffffff0;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        padding: 8px 11px;
+      }
+      .canvasnote strong {
+        color: #9b5e18;
+      }
+      .legend {
+        display: flex;
+        gap: 12px;
+        font-size: 11px;
+        margin-top: 3px;
+      }
+      .dot {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        margin-right: 3px;
+        background: #d5e9e0;
+      }
+      .canvasfooter {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: 13px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        pointer-events: none;
+      }
+      .canvasfooter button {
+        pointer-events: auto;
+      }
+      .badge {
+        font-size: 11px;
+        border-radius: 20px;
+        padding: 3px 8px;
+        background: #eaf2f4;
+        color: #355969;
+      }
+      .badge.error {
+        background: #fce9e9;
+        color: #9b333d;
+      }
+      .badge.warn {
+        background: #fff2da;
+        color: #875b20;
+      }
+      .badge.ok {
+        background: #e8f4ef;
+        color: #277254;
+      }
+      .tabs {
+        display: flex;
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 2;
+        border-bottom: 1px solid var(--line);
+      }
+      .tabs button {
+        flex: 1;
+        border: 0;
+        border-radius: 0;
+        padding: 12px 3px;
+        font-size: 13px;
+        border-bottom: 3px solid transparent;
+      }
+      .tabs button.active {
+        border-bottom-color: var(--teal);
+        color: var(--teal);
+        font-weight: 600;
+      }
+      .panel {
+        padding: 15px;
+      }
+      .empty {
+        text-align: center;
+        margin-top: 60px;
+        color: var(--muted);
+        line-height: 1.9;
+      }
+      .compact {
+        font-size: 12px;
+      }
+      .divider {
+        height: 1px;
+        background: var(--line);
+        margin: 14px 0;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .row > * {
+        min-width: 0;
+      }
+      .row.spread {
+        justify-content: space-between;
+      }
+      .notice {
+        font-size: 12px;
+        background: #fff6e8;
+        color: #85591c;
+        padding: 9px 10px;
+        border-radius: 6px;
+        margin: 9px 0;
+      }
+      .componentrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 7px;
+        border-bottom: 1px solid #eef2f4;
+        cursor: pointer;
+      }
+      .componentrow:hover,
+      .componentrow.selected {
+        background: #edf6f4;
+      }
+      .componentrow .id {
+        font-family: monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .componentrow .label {
+        flex: 1;
+      }
+      .task {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 11px;
+        margin: 10px 0;
+      }
+      .task .title {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+      }
+      .task ul,
+      .changes ul {
+        padding-left: 18px;
+        font-size: 12px;
+        margin: 8px 0;
+      }
+      .task p {
+        font-size: 12px;
+        margin: 8px 0;
+        color: #596f7c;
+      }
+      .issue {
+        font-size: 12px;
+        padding: 8px;
+        border-left: 3px solid #e4b86d;
+        background: #fffbf2;
+        margin: 7px 0;
+        cursor: pointer;
+      }
+      .issue.error {
+        border-color: #c7656c;
+        background: #fff4f4;
+      }
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+      }
+      .metric {
+        background: #f2f6f7;
+        padding: 8px;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .metric b {
+        display: block;
+        font-size: 19px;
+        color: var(--ink);
+      }
+      .changes {
+        font-size: 12px;
+        color: #506975;
+      }
+      .pillgroup {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        margin: 12px 0;
+      }
+      .pillgroup button {
+        font-size: 12px;
+        padding: 4px 7px;
+      }
+      .pillgroup .active {
+        background: #e4f1ef;
+        border-color: #87b9b3;
+      }
+      .distrow {
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid #edf1f3;
+      }
+      details {
+        margin: 10px 0;
+      }
+      summary {
+        cursor: pointer;
+        font-size: 12px;
+        color: #456779;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      dialog {
+        width: min(820px, 94vw);
+        max-height: 88vh;
+        border: 1px solid #b9cdd5;
+        border-radius: 12px;
+        padding: 22px;
+        color: var(--ink);
+      }
+      dialog::backdrop {
+        background: #102b4070;
+      }
+      dialog .close {
+        float: right;
+      }
+      .modalbody {
+        max-height: 68vh;
+        overflow: auto;
+        padding-right: 4px;
+      }
+      .modalbody p,
+      .modalbody li {
+        font-size: 13px;
+      }
+      .modalbody pre {
+        font-size: 12px;
+        white-space: pre-wrap;
+        background: #f1f6f7;
+        padding: 12px;
+        border-radius: 6px;
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 25px;
+        transform: translateX(-50%);
+        max-width: 80vw;
+        background: #183746;
+        color: white;
+        border-radius: 9px;
+        padding: 12px 20px;
+        box-shadow: 0 4px 20px #0002;
+        z-index: 10;
+        font-size: 13px;
+        white-space: pre-wrap;
+      }
+      .toast.error {
+        background: #8d3440;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .micro {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .formerror {
+        color: var(--red);
+        font-size: 12px;
+        white-space: pre-wrap;
+      }
+      kbd {
+        font: 11px monospace;
+        border: 1px solid #d0dce2;
+        border-radius: 3px;
+        padding: 1px 4px;
+        background: #f5f7f8;
+      }
+      .headerlabel {
+        font-size: 11px;
+        color: #cee3e6;
+      }
+      .canvas-label {
+        pointer-events: none;
+      }
+      .controlsmall button {
+        padding: 5px 8px;
+        font-size: 12px;
+      }
+      @media (max-width: 1150px) {
+        .workspace {
+          grid-template-columns: 170px minmax(280px, 1fr) 310px;
+        }
+        .left {
+          padding: 13px 10px;
+        }
+        header .sub {
+          display: none;
+        }
+        header {
+          padding: 12px;
+        }
+        .topbar {
+          gap: 6px;
+        }
+        .topbar .right {
+          display: none;
+        }
+      }
+      @media (max-width: 850px) {
+        header {
+          flex-wrap: wrap;
+          gap: 7px;
+        }
+        header .actions {
+          margin-left: 0;
+          flex-wrap: wrap;
+        }
+        header h1 {
+          width: 100%;
+        }
+        .workspace {
+          height: auto;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          min-height: 0;
+        }
+        .left {
+          grid-column: 1/-1;
+          display: flex;
+          gap: 15px;
+          flex-wrap: wrap;
+        }
+        .left .palette {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .left > section {
+          flex: 1;
+          min-width: 200px;
+        }
+        .left .shortcuts {
+          display: none;
+        }
+        .canvasarea {
+          grid-column: 1/-1;
+          height: 65vh;
+          min-height: 500px;
+        }
+        .rightpanel {
+          grid-column: 1/-1;
+          max-height: none;
+          min-height: 300px;
+        }
+        .topbar {
+          font-size: 12px;
+        }
+        .workspace {
+          min-height: 0;
+        }
+        .palette button {
+          padding: 6px;
+        }
+        .canvasarea .canvasnote {
+          max-width: 70%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>键盘布局工作台</h1>
+        <div class="sub">用物理布局表达想法，再逐项确认如何制作</div>
+      </div>
+      <div class="actions">
+        <button id="help">使用说明</button><button id="import">打开 JSON</button
+        ><button id="restore">恢复原始基准</button
+        ><button class="primary" id="export">导出布局 JSON</button>
+      </div>
+    </header>
+    <div class="topbar">
+      <button id="undo" title="Ctrl Z">↶ 撤销</button
+      ><button id="redo" title="Ctrl Shift Z">↷ 重做</button
+      ><label class="check"><input id="grid" type="checkbox" checked />网格</label
+      ><select id="gridSize" aria-label="网格间距">
+        <option value="1">1 mm 网格</option>
+        <option value="5" selected>5 mm 网格</option>
+        <option value="19.05">19.05 mm 网格</option></select
+      ><label class="check"><input id="snap" type="checkbox" checked />吸附</label
+      ><select id="snapSize" aria-label="吸附步长">
+        <option value="0.5">0.5 mm</option>
+        <option value="1" selected>1 mm</option>
+        <option value="5">5 mm</option>
+        <option value="19.05">19.05 mm</option></select
+      ><select id="compare" aria-label="对比显示">
+        <option value="current">当前草案</option>
+        <option value="overlay">叠加原始布局</option>
+        <option value="baseline">只看原始基准</option></select
+      ><button id="settings">全局电气设置</button
+      ><span class="right">拖动移动 · 拖圆点旋转 · 拖方块缩放 · 滚轮缩放 · 空格拖动画布</span>
+    </div>
+    <main class="workspace">
+      <aside class="left">
+        <section>
+          <h2>添加组件</h2>
+          <div class="palette">
+            <button data-add="key"><span class="glyph">▢</span>机械按键</button
+            ><button data-add="encoder"><span class="glyph round">◉</span>小旋钮</button
+            ><button data-add="jog"><span class="glyph round">◎</span>大转盘</button
+            ><button data-add="oled"><span class="glyph screen">▤</span>OLED 屏幕</button>
+          </div>
+          <p class="hint">
+            新增组件放在空闲位置。选中后可拖动，也可输入精确坐标与尺寸。圆形组件的尺寸为直径。
+          </p>
+        </section>
+        <section>
+          <div class="divider"></div>
+          <h2>外壳草案外形</h2>
+          <div class="fieldgrid">
+            <label>宽度 mm<input id="boardW" type="number" min="10" max="1000" step="0.1" /></label
+            ><label>高度 mm<input id="boardH" type="number" min="10" max="1000" step="0.1" /></label
+            ><label>圆角 mm<input id="boardR" type="number" min="0" step="0.1" /></label
+            ><label
+              >最小净距 mm<input id="boardGap" type="number" min="0" max="100" step="0.1"
+            /></label>
+          </div>
+          <button id="applyBoard">应用外形</button>
+          <div class="notice">
+            默认外形参考上盖 STL 包围范围。组件坐标和尺寸是占位示意，未实测，不是加工文件。
+          </div>
+          <label>草案名称<input id="designName" maxlength="100" /></label
+          ><label style="margin-top: 8px"
+            >给后续分析的备注<textarea id="designNotes" maxlength="10000"></textarea></label
+          ><button id="resume" class="hidden" style="margin-top: 9px">恢复浏览器草稿</button>
+          <p id="draftStatus" class="micro">请用导出 JSON 保存可靠副本。</p>
+        </section>
+        <section class="shortcuts">
+          <div class="divider"></div>
+          <h2>快捷操作</h2>
+          <p class="hint">
+            <kbd>Delete</kbd> 删除选中<br /><kbd>Ctrl D</kbd> 复制选中<br /><kbd>R</kbd> 顺时针旋转
+            15°<br /><kbd>方向键</kbd> 移动 1 mm<br /><kbd>Shift</kbd> + 方向键 移动 5 mm<br /><kbd
+              >Ctrl S</kbd
+            >
+            导出 JSON<br /><kbd>Esc</kbd> 取消选中
+          </p>
+        </section>
+      </aside>
+      <section class="canvasarea">
+        <div class="canvasnote">
+          <strong>毫米布局草案 · 所有占位尺寸待确认</strong>
+          <div class="legend">
+            <span><i class="dot"></i>按键</span
+            ><span><i class="dot" style="background: #dce5f5"></i>旋转组件</span
+            ><span><i class="dot" style="background: #e5abab"></i>红色为重叠或越界</span>
+          </div>
+        </div>
+        <svg
+          id="canvas"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-label="键盘物理布局编辑画布"
+        ></svg>
+        <div class="canvasfooter">
+          <button id="fit">适合画布</button><button id="zoomIn">＋</button
+          ><button id="zoomOut">－</button><span id="canvasStatus" class="badge"></span>
+        </div>
+      </section>
+      <aside class="rightpanel">
+        <div class="tabs">
+          <button data-tab="properties" class="active">组件属性</button
+          ><button data-tab="components">组件列表</button
+          ><button data-tab="analysis">改版分析</button>
+        </div>
+        <div id="panel" class="panel"></div>
+      </aside>
+    </main>
+    <input id="file" type="file" accept=".json,application/json" class="hidden" />
+    <div id="toast" class="toast hidden" role="status"></div>
+    <dialog id="modal">
+      <button class="close" id="closeModal">关闭</button>
+      <h2 id="modalTitle"></h2>
+      <div id="modalBody" class="modalbody"></div>
+    </dialog>
+    <script>
+      /*__CORE__*/
+    </script>
+    <script>
+      (function () {
+        'use strict';
+        const C = LayoutCore,
+          $ = (id) => document.getElementById(id),
+          esc = (s) =>
+            String(s ?? '').replace(
+              /[&<>"']/g,
+              (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+            );
+        let design = C.baseline(),
+          selected = null,
+          tab = 'properties',
+          history = [],
+          future = [],
+          report = null,
+          view = { x: -18, y: -15, w: 129.5, h: 146.5 },
+          drag = null,
+          space = false,
+          filter = 'all',
+          toastTimer;
+        const detailStates = new Map();
+        $('panel').addEventListener(
+          'toggle',
+          (ev) => {
+            if (ev.target.tagName === 'DETAILS') {
+              const summary = ev.target.querySelector('summary');
+              if (summary) detailStates.set(summary.textContent, ev.target.open);
+            }
+          },
+          true,
+        );
+        const storageKey = 'keyboard-layout-workbench-v1';
+        let storageOK = true;
+        const statusName = { must: '必须修改', verify: '重新验证', unchanged: '可保持不变' },
+          statusClass = { must: 'error', verify: 'warn', unchanged: 'ok' };
+        const fmt = (n) => Number(n).toFixed(2),
+          num = (id) => Number($(id).value),
+          emptyPin = (v) => v.trim().toUpperCase() || null;
+        function toast(s, error = false) {
+          clearTimeout(toastTimer);
+          $('toast').textContent = s;
+          $('toast').className = 'toast' + (error ? ' error' : '');
+          toastTimer = setTimeout(() => $('toast').classList.add('hidden'), error ? 7000 : 3200);
+        }
+        function saveDraft() {
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(C.exportPackage(design)));
+            $('draftStatus').textContent = '已自动存浏览器草稿；导出 JSON 才是可交付文件。';
+            storageOK = true;
+          } catch (e) {
+            storageOK = false;
+            $('draftStatus').textContent = '此浏览器未开放本地草稿存储，请导出 JSON 保存。';
+          }
+        }
+        function push(before) {
+          if (JSON.stringify(before) === JSON.stringify(design)) return false;
+          history.push(before);
+          if (history.length > 100) history.shift();
+          future = [];
+          saveDraft();
+          return true;
+        }
+        function mutate(fn) {
+          const before = C.clone(design);
+          try {
+            fn();
+            const errors = C.validateDesign(design);
+            if (errors.length) throw Error(errors.slice(0, 4).join('\n'));
+            push(before);
+            if ($('compare').value === 'baseline') $('compare').value = 'current';
+            render();
+          } catch (e) {
+            design = before;
+            render();
+            toast(e.message, true);
+          }
+        }
+        function active() {
+          return design.components.find((c) => c.id === selected);
+        }
+        function select(id) {
+          selected = id;
+          tab = 'properties';
+          render();
+        }
+        function fit() {
+          const bounds = design.components.map(C.bounds),
+            w = Math.max(design.board.width, ...bounds.map((b) => b.right)),
+            h = Math.max(design.board.height, ...bounds.map((b) => b.bottom)),
+            x = Math.min(0, ...bounds.map((b) => b.left)),
+            y = Math.min(0, ...bounds.map((b) => b.top));
+          view = { x: x - 17, y: y - 17, w: w - x + 34, h: h - y + 34 };
+          renderScene();
+        }
+        function render() {
+          report = C.analyze(design);
+          $('boardW').value = design.board.width;
+          $('boardH').value = design.board.height;
+          $('boardR').value = design.board.cornerRadius;
+          $('boardGap').value = design.board.minimumGap;
+          $('designName').value = design.name;
+          $('designNotes').value = design.notes;
+          $('undo').disabled = !history.length;
+          $('redo').disabled = !future.length;
+          document
+            .querySelectorAll('[data-tab]')
+            .forEach((b) => b.classList.toggle('active', b.dataset.tab === tab));
+          renderScene();
+          renderPanel();
+          window.dispatchEvent(new CustomEvent('keyboard-layout-render'));
+        }
+        function svgComponent(c, ghost = false) {
+          const g = c.geometry,
+            bad =
+              !ghost &&
+              report.issues.some(
+                (i) =>
+                  i.severity === 'error' &&
+                  i.componentIds.includes(c.id) &&
+                  ['COLLISION', 'OUTSIDE'].includes(i.code),
+              ),
+            sel = !ghost && selected === c.id;
+          const fill = ghost
+            ? 'none'
+            : bad
+              ? '#fde5e5'
+              : c.type === 'key'
+                ? '#d6ebe1'
+                : c.type === 'oled'
+                  ? '#264c5c'
+                  : '#dce5f5';
+          const stroke = ghost ? '#c49c68' : bad ? '#bb4c55' : sel ? '#07868a' : '#819fa9';
+          const attrs = `fill="${fill}" stroke="${stroke}" stroke-width="${sel ? 0.65 : 0.3}" ${ghost ? 'stroke-dasharray="1.6 1.3" opacity="0.6"' : ''}`;
+          const shape = C.circular(c)
+            ? `<circle r="${g.width / 2}" ${attrs}/><circle r="${g.width * 0.31}" fill="none" stroke="${ghost ? '#c49c68' : '#a7b6d1'}" stroke-width=".3"/><path d="M0 ${-g.width * 0.36}V${-g.width * 0.47}" stroke="${stroke}" stroke-width=".7"/>`
+            : `<rect x="${-g.width / 2}" y="${-g.height / 2}" width="${g.width}" height="${g.height}" rx="${c.type === 'key' ? 1.25 : 0.8}" ${attrs}/>`;
+          const m = C.matrixOf(c),
+            label =
+              c.type === 'key'
+                ? c.label.slice(0, 12)
+                : c.type === 'encoder'
+                  ? '旋钮'
+                  : c.type === 'jog'
+                    ? '转盘'
+                    : 'OLED';
+          const line2 =
+            c.type === 'key'
+              ? (c.keycodes['0'] || '未分配').replace(/^KC_/, '')
+              : c.type === 'oled'
+                ? c.electrical.display.resolution.join(' × ')
+                : c.electrical.encoder?.index === null
+                  ? '索引待定'
+                  : '#' + c.electrical.encoder?.index;
+          return `<g transform="translate(${g.x} ${g.y}) rotate(${g.rotation})" ${ghost ? 'pointer-events="none"' : `data-id="${esc(c.id)}" style="cursor:${$('compare').value === 'baseline' ? 'default' : 'move'}"`}>${shape}<text class="canvas-label" text-anchor="middle" y="-.3" font-size="${Math.max(1.4, Math.min(2.7, g.width / 5))}" fill="${c.type === 'oled' && !ghost ? '#d8f1e5' : '#254251'}">${esc(label)}</text><text class="canvas-label" text-anchor="middle" y="3" font-size="1.7" fill="${c.type === 'oled' && !ghost ? '#acd2ca' : '#647e8a'}">${esc(line2.slice(0, 16))}</text></g>`;
+        }
+        function renderScene() {
+          if (!report) report = C.analyze(design);
+          const svg = $('canvas'),
+            b = design.board,
+            mode = $('compare').value,
+            baseline = C.baseline();
+          svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
+          const grid = Number($('gridSize').value);
+          let content = `<defs><pattern id="smallGrid" x="0" y="0" width="${grid}" height="${grid}" patternUnits="userSpaceOnUse"><path d="M ${grid} 0 L 0 0 0 ${grid}" fill="none" stroke="#cbd9df" stroke-width=".13"/></pattern><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1.6" stdDeviation="1.8" flood-color="#617e90" flood-opacity=".16"/></filter></defs><rect x="${view.x}" y="${view.y}" width="${view.w}" height="${view.h}" fill="${$('grid').checked ? 'url(#smallGrid)' : '#edf2f5'}"/>`;
+          const board = mode === 'baseline' ? baseline.board : b;
+          content += `<rect x="0" y="0" width="${board.width}" height="${board.height}" rx="${board.cornerRadius}" fill="#fbfdfd" stroke="#8199a5" stroke-width=".4" filter="url(#shadow)"/>`;
+          if ($('grid').checked)
+            content += `<rect x="0" y="0" width="${board.width}" height="${board.height}" rx="${board.cornerRadius}" fill="url(#smallGrid)" opacity=".55" pointer-events="none"/>`;
+          if (mode === 'overlay') {
+            content +=
+              `<rect x="0" y="0" width="${baseline.board.width}" height="${baseline.board.height}" rx="${baseline.board.cornerRadius}" fill="none" stroke="#c49c68" stroke-width=".35" stroke-dasharray="2 1" pointer-events="none"/>` +
+              baseline.components.map((c) => svgComponent(c, true)).join('');
+          }
+          content += (mode === 'baseline' ? baseline.components : design.components)
+            .map((c) => svgComponent(c, mode === 'baseline'))
+            .join('');
+          const tick = (x1, y1, x2, y2) =>
+            `<path d="M${x1} ${y1}L${x2} ${y2}" stroke="#6b8998" stroke-width=".2" fill="none"/>`;
+          content +=
+            tick(0, -5, board.width, -5) +
+            tick(0, -7, 0, -3) +
+            tick(board.width, -7, board.width, -3) +
+            `<text x="${board.width / 2}" y="-6.8" text-anchor="middle" font-size="2.3" fill="#4a6b7b">外壳草案 ${fmt(board.width)} mm</text>` +
+            tick(-5, 0, -5, board.height) +
+            tick(-7, 0, -3, 0) +
+            tick(-7, board.height, -3, board.height) +
+            `<text transform="translate(-7 ${board.height / 2}) rotate(-90)" text-anchor="middle" font-size="2.3" fill="#4a6b7b">${fmt(board.height)} mm</text>`;
+          const c = active();
+          if (c && mode !== 'baseline') {
+            const g = c.geometry;
+            content += `<g transform="translate(${g.x} ${g.y}) rotate(${g.rotation})"><rect x="${-g.width / 2 - 1}" y="${-g.height / 2 - 1}" width="${g.width + 2}" height="${g.height + 2}" fill="none" stroke="#07868a" stroke-width=".3" stroke-dasharray="1 1" pointer-events="none"/><line x1="0" y1="${-g.height / 2}" x2="0" y2="${-g.height / 2 - 5}" stroke="#07868a" stroke-width=".35"/><circle data-handle="rotate" cx="0" cy="${-g.height / 2 - 5}" r="1.5" fill="white" stroke="#07868a" stroke-width=".5" style="cursor:grab"/><rect data-handle="resize" x="${g.width / 2 - 1.2}" y="${g.height / 2 - 1.2}" width="2.4" height="2.4" fill="white" stroke="#07868a" stroke-width=".45" style="cursor:nwse-resize"/></g>`;
+            const near = report.distances
+              .filter((v) => (v.a === c.id || v.b === c.id) && !v.overlap)
+              .slice(0, 1);
+            if (near.length) {
+              const n = design.components.find(
+                (x) => x.id === (near[0].a === c.id ? near[0].b : near[0].a),
+              );
+              if (n) {
+                const x = (g.x + n.geometry.x) / 2,
+                  y = (g.y + n.geometry.y) / 2;
+                content += `<path d="M${g.x} ${g.y}L${n.geometry.x} ${n.geometry.y}" stroke="#d09c56" stroke-width=".25" stroke-dasharray=".8 .8" pointer-events="none"/><text x="${x}" y="${y - 1}" text-anchor="middle" font-size="2" fill="#97651f" stroke="#fff" stroke-width=".8" paint-order="stroke" pointer-events="none">净距 ${fmt(near[0].gapMm)} mm</text>`;
+              }
+            }
+          }
+          svg.innerHTML = content;
+          $('canvasStatus').textContent =
+            mode === 'baseline'
+              ? '原始基准只读'
+              : `${design.components.length} 组件 · ${report.summary.collisions} 处重叠 · ${report.issues.filter((v) => v.severity === 'error').length} 项冲突`;
+        }
+        function field(label, id, value, type = 'text', extra = '') {
+          return `<label>${esc(label)}<input id="${id}" type="${type}" value="${esc(value)}" ${extra}></label>`;
+        }
+        function inputPanel(v, prefix) {
+          if (!v) return '<p class="hint">此组件没有按压输入。</p>';
+          if (v.kind === 'matrix') {
+            const m = design.configuration.matrix;
+            let options = '<option value="">未分配</option>';
+            for (let r = 0; r < m.rows; r++)
+              for (let c = 0; c < m.cols; c++) {
+                const owner = design.components.find(
+                  (x) => x.id !== selected && C.matrixOf(x)?.row === r && C.matrixOf(x)?.col === c,
+                );
+                options += `<option value="${r},${c}" ${v.row === r && v.col === c ? 'selected' : ''}>r${r} c${c}${owner ? ' · 已用 ' + esc(owner.id) : ''}</option>`;
+              }
+            const derived =
+              v.row === null
+                ? '先分配逻辑位置，再确定行列连接。'
+                : `行 r${v.row} → ${esc(m.rowPins[v.row] || '待分配')}　列 c${v.col} → ${esc(m.colPins[v.col] || '待分配')}`;
+            return `<label>逻辑矩阵位置<select id="${prefix}matrix">${options}</select></label><p class="micro">${derived}</p>`;
+          }
+          return `<div class="fieldgrid">${field('直连 GPIO', prefix + 'pin', v.pin || '')}${field('按压键码', prefix + 'keycode', v.keycode)}</div><label class="check"><input id="${prefix}implemented" type="checkbox" ${v.implemented ? 'checked' : ''}>已实现按下与释放固件</label>`;
+        }
+        function bind(id, event, fn) {
+          if ($(id)) $(id).addEventListener(event, fn);
+        }
+        function renderPanel() {
+          const panel = $('panel');
+          if (tab === 'components') {
+            panel.innerHTML =
+              `<h2>当前组件 <span class="muted">${design.components.length}</span></h2><p class="hint">稳定 ID 用于关联原矩阵和后续改版。拖动不会改变电气映射。</p>` +
+              design.components
+                .map(
+                  (c) =>
+                    `<div class="componentrow ${selected === c.id ? 'selected' : ''}" data-select="${esc(c.id)}"><span class="glyph ${C.circular(c) ? 'round' : ''}">${c.type === 'key' ? '▢' : c.type === 'oled' ? '▤' : '◉'}</span><div class="label">${esc(c.label)}<div class="id">${esc(c.id)} · ${C.names[c.type]}</div></div><span class="micro">${fmt(c.geometry.x)}, ${fmt(c.geometry.y)}</span></div>`,
+                )
+                .join('');
+            panel
+              .querySelectorAll('[data-select]')
+              .forEach((e) => (e.onclick = () => select(e.dataset.select)));
+            return;
+          }
+          if (tab === 'analysis') {
+            renderAnalysis();
+            return;
+          }
+          const c = active();
+          if (!c) {
+            panel.innerHTML =
+              '<div class="empty">在画布上选择一个组件<br>或从左侧添加新组件<br><span class="micro">位置改变会保留原 ID、矩阵与键码。</span></div>';
+            return;
+          }
+          const g = c.geometry,
+            e = c.electrical,
+            v = C.matrixOf(c),
+            nearest = report.distances.filter((v) => v.a === c.id || v.b === c.id).slice(0, 4),
+            edge = C.boundary(c, design.board);
+          panel.innerHTML = `<div class="row spread"><h2>${esc(C.names[c.type])}</h2><span class="badge">${esc(c.id)}</span></div>${field('显示名称', 'propLabel', c.label, 'text', 'maxlength="100"')}<div class="fieldgrid">${field('中心 X mm', 'propX', g.x, 'number', 'step="0.1"')}${field('中心 Y mm', 'propY', g.y, 'number', 'step="0.1"')}${field(C.circular(c) ? '直径 mm' : '宽度 mm', 'propW', g.width, 'number', 'min="1" max="500" step="0.1"')}${field('高度 mm', 'propH', g.height, 'number', `min="1" max="500" step="0.1" ${C.circular(c) ? 'disabled' : ''}`)}${field('顺时针旋转 °', 'propR', g.rotation, 'number', 'step="1"')}</div><div class="row controlsmall"><button id="rotLeft">↶ 15°</button><button id="rotRight">↷ 15°</button><button id="duplicate">复制</button><button id="delete" class="danger">删除</button></div><p class="micro">尺寸是组件外包络，不是轴孔或焊盘。旋钮和转盘的朝向表示器件安装朝向。</p><label class="check"><input id="geoConfirmed" type="checkbox" ${g.confirmed ? 'checked' : ''}>尺寸和安装位置已有实测依据</label>${field('尺寸依据或待确认事项', 'geoSource', g.source, 'text', 'maxlength="1000"')}<h3>相互间距</h3>${nearest.map((n) => `<div class="distrow"><span>至 ${esc(n.a === c.id ? n.b : n.a)}</span><span class="${n.overlap ? 'danger' : ''}">${n.overlap ? '重叠' : fmt(n.gapMm) + ' mm 净距'}</span></div>`).join('')}<div class="distrow"><span>至外形边缘</span><span>${edge.outside ? '越界' : fmt(edge.clearance) + ' mm'}</span></div><p class="micro">按旋转矩形或圆形外包络计算，未包含安装焊盘、手指操作空间、高度与插头。</p><details open><summary>硬件映射与固件功能</summary><div class="stack" style="margin-top:9px">${inputPanel(e.input || e.press, 'in_')}${e.encoder ? `<div class="fieldgrid">${field('编码器索引', 'encIndex', e.encoder.index ?? '', 'number', 'min="0" max="31"')}${field('每格分辨率', 'encResolution', e.encoder.resolution, 'number', 'min="1" max="32"')}${field('A 相 GPIO', 'encA', e.encoder.pinA || '')}${field('B 相 GPIO', 'encB', e.encoder.pinB || '')}${field('顺时针键码', 'encCw', e.encoder.cw)}${field('逆时针键码', 'encCcw', e.encoder.ccw)}</div><p class="micro">公共端固定为 GND；新索引与真实规格必须确认。</p>` : ''}${e.display ? `<div class="fieldgrid">${field('SDA GPIO', 'oledSda', e.display.sda || '')}${field('SCL GPIO', 'oledScl', e.display.scl || '')}${field('控制器型号', 'oledController', e.display.controller || '')}${field('I²C 地址 十进制', 'oledAddress', e.display.address ?? '', 'number', 'min="0" max="127"')}${field('模块供电 V', 'oledV', e.display.supplyV ?? '', 'number', 'min="0" max="60" step="0.1"')}<label>图像旋转<select id="oledRotation">${[0, 90, 180, 270].map((n) => `<option ${n === e.display.rotation ? 'selected' : ''}>${n}</option>`).join('')}</select></label></div><p class="micro">0x3C = 十进制 60；地址未实测时留空。像素尺寸 128 × 64 与物理外形不同。</p>` : ''}${c.type === 'key' || e.press?.kind === 'matrix' ? `<div class="fieldgrid">${design.configuration.layers.map((name, i) => field('层 ' + i + ' ' + name, 'kc' + i, c.keycodes[i] || 'KC_NO')).join('')}</div>` : ''}<label class="check"><input id="propRgb" type="checkbox" ${c.rgb ? 'checked' : ''}>该组件带一颗 RGB 灯（不自动更改总数）</label></div></details><details><summary>实际器件规格</summary><div class="stack" style="margin-top:9px">${field('厂家', 'specManufacturer', c.spec.manufacturer || '')}${field('准确型号或采购料号', 'specPart', c.spec.partNumber || '')}${field('安装封装或机械图编号', 'specFootprint', c.spec.footprint || '')}${field('额定供电 V', 'specV', c.spec.supplyV ?? '', 'number', 'min="0" max="60" step="0.1"')}<label class="check"><input id="specConfirmed" type="checkbox" ${c.spec.confirmed ? 'checked' : ''}>型号和规格已按厂家资料确认</label></div></details><label>组件备注<textarea id="propNotes" maxlength="10000">${esc(c.notes)}</textarea></label><div class="notice">电气未分配或尺寸未确认时，仍可保存草案；分析会保留待确认项。</div>`;
+          panel.querySelectorAll('details').forEach((el) => {
+            const key = el.querySelector('summary')?.textContent;
+            if (detailStates.has(key)) el.open = detailStates.get(key);
+          });
+          const propChange = (id, fn) =>
+            bind(id, 'change', () => mutate(() => fn(active(), $(id).value)));
+          for (const [id, k] of [
+            ['propX', 'x'],
+            ['propY', 'y'],
+            ['propW', 'width'],
+            ['propH', 'height'],
+            ['propR', 'rotation'],
+          ])
+            propChange(id, (a, value) => {
+              a.geometry[k] = Number(value);
+              if (C.circular(a) && k === 'width') a.geometry.height = Number(value);
+              a.geometry.confirmed = false;
+              a.geometry.source = '手动修改的草案值，待实测';
+            });
+          propChange('propLabel', (a, value) => (a.label = value));
+          propChange('geoSource', (a, value) => (a.geometry.source = value));
+          propChange('propNotes', (a, value) => (a.notes = value));
+          bind('geoConfirmed', 'change', () =>
+            mutate(() => (active().geometry.confirmed = $('geoConfirmed').checked)),
+          );
+          bind('propRgb', 'change', () => mutate(() => (active().rgb = $('propRgb').checked)));
+          bind('rotLeft', 'click', () => rotate(-15));
+          bind('rotRight', 'click', () => rotate(15));
+          bind('delete', 'click', remove);
+          bind('duplicate', 'click', duplicate);
+          propChange('in_matrix', (a, value) => {
+            const z = a.electrical.input || a.electrical.press;
+            if (value) {
+              const [r, c] = value.split(',').map(Number);
+              z.row = r;
+              z.col = c;
+            } else {
+              z.row = null;
+              z.col = null;
+            }
+          });
+          propChange(
+            'in_pin',
+            (a, value) => ((a.electrical.input || a.electrical.press).pin = emptyPin(value)),
+          );
+          propChange(
+            'in_keycode',
+            (a, value) => ((a.electrical.input || a.electrical.press).keycode = value),
+          );
+          bind('in_implemented', 'change', () =>
+            mutate(
+              () =>
+                ((active().electrical.input || active().electrical.press).implemented =
+                  $('in_implemented').checked),
+            ),
+          );
+          for (const [id, k] of [
+            ['encA', 'pinA'],
+            ['encB', 'pinB'],
+            ['encCw', 'cw'],
+            ['encCcw', 'ccw'],
+            ['encIndex', 'index'],
+            ['encResolution', 'resolution'],
+          ])
+            propChange(id, (a, value) => {
+              a.electrical.encoder[k] = ['pinA', 'pinB'].includes(k)
+                ? emptyPin(value)
+                : ['index', 'resolution'].includes(k)
+                  ? value === ''
+                    ? null
+                    : Number(value)
+                  : value;
+            });
+          for (let i = 0; i < 4; i++) propChange('kc' + i, (a, value) => (a.keycodes[i] = value));
+          for (const [id, k] of [
+            ['oledSda', 'sda'],
+            ['oledScl', 'scl'],
+            ['oledController', 'controller'],
+            ['oledAddress', 'address'],
+            ['oledV', 'supplyV'],
+            ['oledRotation', 'rotation'],
+          ])
+            propChange(id, (a, value) => {
+              a.electrical.display[k] = ['sda', 'scl'].includes(k)
+                ? emptyPin(value)
+                : ['address', 'supplyV'].includes(k)
+                  ? value === ''
+                    ? null
+                    : Number(value)
+                  : k === 'rotation'
+                    ? Number(value)
+                    : value || null;
+            });
+          for (const [id, k] of [
+            ['specManufacturer', 'manufacturer'],
+            ['specPart', 'partNumber'],
+            ['specFootprint', 'footprint'],
+            ['specV', 'supplyV'],
+          ])
+            propChange(id, (a, value) => {
+              a.spec[k] = k === 'supplyV' ? (value === '' ? null : Number(value)) : value || null;
+              a.spec.confirmed = false;
+            });
+          bind('specConfirmed', 'change', () =>
+            mutate(() => (active().spec.confirmed = $('specConfirmed').checked)),
+          );
+        }
+        function renderAnalysis() {
+          const panel = $('panel'),
+            r = report;
+          panel.innerHTML = `<h2>相对原始基准的改版影响</h2><div class="metrics"><div class="metric"><b>${r.summary.keys}</b>机械按键</div><div class="metric"><b>${r.summary.matrixAssigned}/${r.summary.matrixCapacity}</b>已分配矩阵</div><div class="metric"><b>${r.summary.gpioUsed}</b>占用 GPIO</div></div><p class="hint">只移动位置保留 ID、矩阵和网络；PCB 更新摆放与局部走线，电路原理与 GPIO 不自动重设。</p><div class="pillgroup">${[
+            ['all', '全部'],
+            ['must', '必须修改'],
+            ['verify', '重新验证'],
+            ['unchanged', '可保持'],
+          ]
+            .map(
+              ([id, t]) =>
+                `<button data-filter="${id}" class="${filter === id ? 'active' : ''}">${t}</button>`,
+            )
+            .join('')}</div>${r.tasks
+            .filter((t) => filter === 'all' || t.status === filter)
+            .map(
+              (t) =>
+                `<article class="task"><div class="title">${esc(t.label)}<span class="badge ${statusClass[t.status]}">${statusName[t.status]}</span></div><ul>${t.reasons.map((x) => `<li>${esc(x)}</li>`).join('')}</ul><p>下一步：${t.steps.map(esc).join(' ')}</p><span class="micro">原教程第 ${esc(t.tutorialPages)} 页</span></article>`,
+            )
+            .join(
+              '',
+            )}<h3>几何与输入检查 <span class="badge">${r.issues.length}</span></h3><p class="micro">错误不阻止导出草案。缺少规格时只列待确认，不推定可加工。</p>${r.issues.map((i, k) => `<div class="issue ${i.severity === 'error' ? 'error' : ''}" data-issue="${k}">${esc(i.message)}</div>`).join('')}<details class="changes"><summary>查看 ${r.changes.length} 条变化记录</summary><ul>${r.changes.map((x) => `<li>${esc(x.id)} · ${esc({ geometry: '移动/旋转/尺寸', added: '新增', removed: '删除', electrical: '电气或行为', keycodes: '键码', spec: '器件规格', rgb: 'RGB 标记', label: '名称', notes: '备注', configuration: '全局配置', board: '外形/间隙', geometryEvidence: '尺寸确认依据', type: '类型' }[x.kind] || x.kind)}${x.fields ? ' ' + esc(x.fields.join(', ')) : ''}</li>`).join('') || '<li>没有变化</li>'}</ul></details><details><summary>原资料仍需解决的问题</summary>${r.knownBaselineIssues.map((x) => `<p class="hint">${esc(x)}</p>`).join('')}</details><button id="exportReport">导出改版清单 TXT</button>`;
+          panel.querySelectorAll('[data-filter]').forEach(
+            (e) =>
+              (e.onclick = () => {
+                filter = e.dataset.filter;
+                renderAnalysis();
+              }),
+          );
+          panel.querySelectorAll('[data-issue]').forEach(
+            (e) =>
+              (e.onclick = () => {
+                const id = r.issues[Number(e.dataset.issue)].componentIds.find((id) =>
+                  design.components.some((c) => c.id === id),
+                );
+                if (id) select(id);
+              }),
+          );
+          bind('exportReport', 'click', exportReport);
+        }
+        function nextId(prefix) {
+          let i = 1;
+          while (design.components.some((c) => c.id === prefix + i)) i++;
+          return prefix + i;
+        }
+        function newComponent(type) {
+          const id = nextId(
+              type === 'key'
+                ? 'KEY_'
+                : type === 'encoder'
+                  ? 'ENC_'
+                  : type === 'jog'
+                    ? 'JOG_'
+                    : 'OLED_',
+            ),
+            g = {
+              x: design.board.width / 2,
+              y: design.board.height / 2,
+              width: type === 'key' ? 18 : type === 'oled' ? 32 : type === 'jog' ? 34 : 19,
+              height: type === 'key' ? 18 : type === 'oled' ? 14 : type === 'jog' ? 34 : 19,
+              rotation: 0,
+              confirmed: false,
+              source: '新增占位尺寸，必须按实物确认',
+            },
+            matrix = { kind: 'matrix', row: null, col: null };
+          const electrical =
+            type === 'key'
+              ? { input: matrix }
+              : type === 'oled'
+                ? {
+                    display: {
+                      bus: 'I2C',
+                      sda: null,
+                      scl: null,
+                      address: null,
+                      controller: null,
+                      resolution: [128, 64],
+                      rotation: 0,
+                      supplyV: null,
+                    },
+                  }
+                : {
+                    encoder: {
+                      index: null,
+                      pinA: null,
+                      pinB: null,
+                      common: 'GND',
+                      resolution: 2,
+                      cw: 'KC_RIGHT',
+                      ccw: 'KC_LEFT',
+                    },
+                    press: matrix,
+                  };
+          const c = {
+            id,
+            type,
+            label: '新增' + C.names[type],
+            geometry: g,
+            spec: {
+              manufacturer: null,
+              partNumber: null,
+              footprint: null,
+              supplyV: null,
+              confirmed: false,
+            },
+            electrical,
+            keycodes: type === 'oled' ? {} : { 0: 'KC_NO', 1: 'KC_NO', 2: 'KC_NO', 3: 'KC_NO' },
+            rgb: false,
+            notes: '',
+          };
+          for (let y = 12; y < design.board.height; y += 5) {
+            let found = false;
+            for (let x = 12; x < design.board.width; x += 5) {
+              g.x = x;
+              g.y = y;
+              if (
+                !C.boundary(c, design.board).outside &&
+                design.components.every(
+                  (o) => C.gap(c, o).gap >= design.board.minimumGap && !C.gap(c, o).overlap,
+                )
+              ) {
+                found = true;
+                break;
+              }
+            }
+            if (found) return c;
+          }
+          g.x = design.board.width + g.width / 2 + 5;
+          g.y = 20;
+          return c;
+        }
+        function add(type) {
+          if ($('compare').value === 'baseline') $('compare').value = 'current';
+          mutate(() => {
+            const c = newComponent(type);
+            design.components.push(c);
+            selected = c.id;
+            tab = 'properties';
+          });
+          fit();
+          toast('已添加；请分配输入映射并确认真实尺寸。');
+        }
+        function remove() {
+          if (!active()) return;
+          const id = selected;
+          mutate(() => {
+            design.components = design.components.filter((c) => c.id !== id);
+            selected = null;
+          });
+        }
+        function duplicate() {
+          const c = active();
+          if (!c) return;
+          mutate(() => {
+            const n = C.clone(c);
+            n.id = nextId('COPY_');
+            n.label += ' 副本';
+            n.geometry.x += 5;
+            n.geometry.y += 5;
+            n.geometry.confirmed = false;
+            n.geometry.source = '复制后的草案尺寸与位置，待确认';
+            n.spec.confirmed = false;
+            if (n.electrical.input?.kind === 'matrix')
+              n.electrical.input.row = n.electrical.input.col = null;
+            if (n.electrical.press?.kind === 'matrix')
+              n.electrical.press.row = n.electrical.press.col = null;
+            if (n.electrical.input?.kind === 'direct') n.electrical.input.pin = null;
+            if (n.electrical.press?.kind === 'direct') {
+              n.electrical.press.pin = null;
+              n.electrical.press.implemented = false;
+            }
+            if (n.electrical.encoder) {
+              n.electrical.encoder.index = null;
+              n.electrical.encoder.pinA = n.electrical.encoder.pinB = null;
+            }
+            if (n.electrical.display) {
+              n.electrical.display.address = null;
+              n.electrical.display.sda = n.electrical.display.scl = null;
+            }
+            design.components.push(n);
+            selected = n.id;
+          });
+          toast('副本电气映射已清空，避免自动复制冲突。');
+        }
+        function rotate(deg) {
+          if (active())
+            mutate(() => {
+              active().geometry.rotation = (active().geometry.rotation + deg + 360) % 360;
+              active().geometry.confirmed = false;
+            });
+        }
+        function undo() {
+          if (!history.length) return;
+          future.push(C.clone(design));
+          design = history.pop();
+          if (!active()) selected = null;
+          saveDraft();
+          render();
+        }
+        function redo() {
+          if (!future.length) return;
+          history.push(C.clone(design));
+          design = future.pop();
+          if (!active()) selected = null;
+          saveDraft();
+          render();
+        }
+        function download(name, content, type) {
+          const blob = new Blob([content], { type }),
+            url = URL.createObjectURL(blob),
+            a = document.createElement('a');
+          a.href = url;
+          a.download = name;
+          document.body.append(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 2000);
+        }
+        function safeName() {
+          return (design.name || '键盘布局').replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').slice(0, 80);
+        }
+        function exportJSON() {
+          const errors = C.validateDesign(design);
+          if (errors.length) {
+            toast(errors.join('\n'), true);
+            return;
+          }
+          const pkg = C.exportPackage(design);
+          download(
+            safeName() + '.layout.json',
+            JSON.stringify(pkg, null, 2),
+            'application/json;charset=utf-8',
+          );
+          toast('已导出布局 JSON；可重新载入。长期维护请保存完整项目。');
+        }
+        function exportReport() {
+          const r = C.analyze(design),
+            lines = [design.name + ' 改版清单', '这是草案分析，不是加工或烧录文件。', ''];
+          for (const t of r.tasks) {
+            lines.push(
+              '【' + statusName[t.status] + '】' + t.label + ' / 教程 ' + t.tutorialPages + ' 页',
+              ...t.reasons.map((x) => '原因：' + x),
+              ...t.steps.map((x) => '步骤：' + x),
+              '',
+            );
+          }
+          lines.push(
+            '待确认与冲突',
+            ...r.issues.map((x) => '- ' + x.message),
+            '',
+            '原资料已知问题',
+            ...r.knownBaselineIssues.map((x) => '- ' + x),
+          );
+          download(safeName() + '-改版清单.txt', lines.join('\n'), 'text/plain;charset=utf-8');
+        }
+        async function loadFile(file) {
+          if (!file) return;
+          if (file.size > 16 * 1024 * 1024) {
+            toast('JSON 超过 16 MB，请检查文件是否正确。', true);
+            return;
+          }
+          try {
+            const text = await file.text(),
+              pkg = JSON.parse(text),
+              errors = C.validatePackage(pkg);
+            if (errors.length) throw Error(errors.slice(0, 5).join('\n'));
+            const before = C.clone(design);
+            design = C.clone(pkg.design);
+            push(before);
+            selected = null;
+            render();
+            fit();
+            toast('已载入布局；基准保留，分析已重新计算。');
+          } catch (e) {
+            toast('打开失败，当前布局未被替换：\n' + e.message, true);
+          }
+          $('file').value = '';
+        }
+        function modal(title, html) {
+          $('modalTitle').textContent = title;
+          $('modalBody').innerHTML = html;
+          $('modal').showModal();
+        }
+        function settings() {
+          const f = design.configuration,
+            m = f.matrix,
+            l = f.lighting;
+          modal(
+            '全局电气设置',
+            `<p>这些参数会影响真实接线和固件；空白表示未确认。物理拖动不修改这里。</p><div class="fieldgrid">${field('主控型号', 'setMcu', f.mcu)}${field('主控封装', 'setPackage', f.package)}${field('时钟 Hz', 'setClock', f.clockHz, 'number', 'min="1"')}${field('引导程序', 'setBoot', f.bootloader || '')}${field('QMK 提交号', 'setCommit', f.qmkCommit || '')}${field('矩阵行数', 'setRows', m.rows, 'number', 'min="1" max="32"')}${field('矩阵列数', 'setCols', m.cols, 'number', 'min="1" max="32"')}${field('行 GPIO 用逗号分隔', 'setRowPins', m.rowPins.map((v) => v || '?').join(','))}${field('列 GPIO 用逗号分隔', 'setColPins', m.colPins.map((v) => v || '?').join(','))}<label>声明的二极管方向<select id="setDiode"><option ${m.diodeDirection === 'ROW2COL' ? 'selected' : ''}>ROW2COL</option><option ${m.diodeDirection === 'COL2ROW' ? 'selected' : ''}>COL2ROW</option></select></label></div><label class="check"><input id="setDirectionVerified" type="checkbox" ${m.directionVerified ? 'checked' : ''}>已用实际连线验证方向</label><p class="micro">未知 GPIO 可写 ?；端口按 B0 / F4 等芯片端口名，不按开发板丝印编号。</p><h3>RGB 数据链</h3><label class="check"><input id="setLighting" type="checkbox" ${l.enabled ? 'checked' : ''}>启用 RGB</label><div class="fieldgrid">${field('总灯珠数', 'setLedCount', l.count, 'number', 'min="0" max="1024"')}${field('数据 GPIO', 'setLedPin', l.dataPin || '')}${field('灯珠型号', 'setLedPart', l.partNumber || '')}${field('供电 V', 'setLedV', l.supplyV ?? '', 'number', 'step="0.1" min="0" max="60"')}</div><h3>外形尺寸依据</h3><label class="check"><input id="setBoardConfirmed" type="checkbox" ${design.board.confirmed ? 'checked' : ''}>外壳外形尺寸已确认</label>${field('来源说明', 'setBoardSource', design.board.source)}<div id="settingsError" class="formerror"></div><button id="applySettings" class="primary" style="margin-top:14px">应用配置</button>`,
+          );
+          $('applySettings').onclick = () => {
+            const before = C.clone(design);
+            try {
+              const pins = (id) =>
+                $(id)
+                  .value.split(',')
+                  .map((v) => (emptyPin(v) === '?' ? null : emptyPin(v)));
+              const f = design.configuration;
+              f.mcu = $('setMcu').value;
+              f.package = $('setPackage').value;
+              f.clockHz = num('setClock');
+              f.bootloader = $('setBoot').value || null;
+              f.qmkCommit = $('setCommit').value || null;
+              f.matrix = {
+                rows: num('setRows'),
+                cols: num('setCols'),
+                rowPins: pins('setRowPins'),
+                colPins: pins('setColPins'),
+                diodeDirection: $('setDiode').value,
+                directionVerified: $('setDirectionVerified').checked,
+              };
+              f.lighting = {
+                enabled: $('setLighting').checked,
+                count: num('setLedCount'),
+                dataPin: emptyPin($('setLedPin').value),
+                partNumber: $('setLedPart').value || null,
+                supplyV: $('setLedV').value === '' ? null : num('setLedV'),
+              };
+              design.board.confirmed = $('setBoardConfirmed').checked;
+              design.board.source = $('setBoardSource').value;
+              const errors = C.validateDesign(design);
+              if (errors.length) throw Error(errors.slice(0, 5).join('\n'));
+              push(before);
+              $('modal').close();
+              render();
+            } catch (e) {
+              design = before;
+              $('settingsError').textContent = e.message;
+            }
+          };
+        }
+        function help() {
+          modal(
+            '从拖拽布局到后续制作',
+            `<h3>新增 教程与长期项目</h3><p>用“教程预览”查看随当前布局更新的完整教程；用“生成当前版本教程”固定快照并导出 HTML，再打印为 PDF。长期继续设计请用“保存完整项目”导出 *.keyboard-project.json，保留版本、人工内容与确认记录。</p><h3>1 先确定外观</h3><p>默认是教程原始功能关系的示意布局，所有组件尺寸均待确认。拖动组件；拖上方圆点旋转，右下方方块缩放；右侧可精确输入中心坐标、宽高和角度。支持键盘方向键、R、Delete 和 Ctrl D。圆形尺寸为直径。</p><h3>2 查看变化和间距</h3><p>用顶部下拉框叠加原始布局，虚线为基准。选中组件可看最近四个外包络净距；画布虚线连接中心，但标注的是外包络净距。红色提示重叠或越界，最小净距在左侧设置。碰撞只按二维外包络计算，不替代焊盘、手部空间、模块高度和外壳干涉检查。</p><h3>3 保存和恢复</h3><p>“导出布局 JSON”下载统一输入文件；“打开 JSON”重新载入并计算改版影响。“恢复原始基准”可以撤销。Ctrl Z 撤销，Ctrl Shift Z 或 Ctrl Y 重做。浏览器自动草稿只是补充；file:// 存储可能被限制，请总是导出 JSON。</p><h3>4 电气映射独立于位置</h3><p>原组件的 ID、矩阵位置、GPIO 和四层键码跟随组件移动。新增或复制的输入不自动抢占原脚位，需在属性或全局设置里分配。空矩阵交点可能容纳新键，不必默认增加 GPIO。新增 OLED 可共享已有 I²C 总线，但必须确认地址、电平和驱动支持。</p><h3>5 查看改版步骤</h3><p>右侧“改版分析”按 PCB、原理图、矩阵、GPIO、外壳、定位板、BOM、QMK 分类，区分必须修改、重新验证与可保持。原设计问题单独保留，不会因位置未变就被视为已解决。</p><h3>以后发什么给我</h3><p>只交换布局时可发送 <b>*.layout.json</b>；长期继续制作优先发送 <b>*.keyboard-project.json</b>，它还保留教程、版本与人工内容。日常模板教程可直接离线生成。缺少真实规格时，我会据待确认项补齐方案，而不会把这个草案直接当作可加工文件。</p><p class="notice">这里不会输出 PCB Gerber、外壳加工图或可直接刷写的固件。是否可制作必须在 CAD / EDA / QMK 中用真实数据验证。</p>`,
+          );
+        }
+        function screenPoint(ev) {
+          const svg = $('canvas'),
+            pt = svg.createSVGPoint();
+          pt.x = ev.clientX;
+          pt.y = ev.clientY;
+          return pt.matrixTransform(svg.getScreenCTM().inverse());
+        }
+        function snapped(v) {
+          return $('snap').checked
+            ? Math.round(v / Number($('snapSize').value)) * Number($('snapSize').value)
+            : v;
+        }
+        $('canvas').addEventListener('pointerdown', (ev) => {
+          if (ev.button !== 0 && ev.button !== 1) return;
+          const p = screenPoint(ev);
+          if (space || ev.button === 1) {
+            drag = { kind: 'pan', start: p, view: { ...view } };
+            $('canvas').setPointerCapture(ev.pointerId);
+            ev.preventDefault();
+            return;
+          }
+          if ($('compare').value === 'baseline') {
+            toast('原始基准只读；切换到当前草案后编辑。');
+            return;
+          }
+          const handle = ev.target.closest('[data-handle]'),
+            node = ev.target.closest('[data-id]');
+          if (handle && active()) {
+            drag = {
+              kind: handle.dataset.handle,
+              start: p,
+              before: C.clone(design),
+              g: C.clone(active().geometry),
+              id: selected,
+            };
+          } else if (node) {
+            select(node.dataset.id);
+            drag = {
+              kind: 'move',
+              start: p,
+              before: C.clone(design),
+              g: C.clone(active().geometry),
+              id: selected,
+            };
+          } else {
+            selected = null;
+            render();
+            return;
+          }
+          $('canvas').setPointerCapture(ev.pointerId);
+          ev.preventDefault();
+        });
+        $('canvas').addEventListener('pointermove', (ev) => {
+          if (!drag) return;
+          const p = screenPoint(ev);
+          if (drag.kind === 'pan') {
+            view.x += drag.start.x - p.x;
+            view.y += drag.start.y - p.y;
+            renderScene();
+            return;
+          }
+          const c = design.components.find((c) => c.id === drag.id);
+          if (!c) return;
+          const g = c.geometry,
+            z = drag.g;
+          if (drag.kind === 'move') {
+            g.x = Math.max(-2000, Math.min(2000, snapped(z.x + p.x - drag.start.x)));
+            g.y = Math.max(-2000, Math.min(2000, snapped(z.y + p.y - drag.start.y)));
+          } else if (drag.kind === 'rotate') {
+            const a = ((Math.atan2(p.y - z.y, p.x - z.x) * 180) / Math.PI + 90 + 360) % 360;
+            g.rotation = ev.shiftKey ? Math.round(a / 15) * 15 : Math.round(a);
+          } else {
+            const a = (z.rotation * Math.PI) / 180,
+              dx = p.x - z.x,
+              dy = p.y - z.y;
+            let w = Math.max(1, Math.min(500, Math.abs(dx * Math.cos(a) + dy * Math.sin(a)) * 2)),
+              h = Math.max(1, Math.min(500, Math.abs(-dx * Math.sin(a) + dy * Math.cos(a)) * 2));
+            g.width = Math.max(1, snapped(w));
+            g.height = C.circular(c) ? g.width : Math.max(1, snapped(h));
+          }
+          g.confirmed = false;
+          g.source = '拖拽生成的草案值，待实测';
+          report = C.analyze(design);
+          renderScene();
+        });
+        function endDrag(ev) {
+          if (!drag) return;
+          const d = drag;
+          drag = null;
+          if (d.kind !== 'pan') {
+            push(d.before);
+            render();
+          }
+          if ($('canvas').hasPointerCapture(ev.pointerId))
+            $('canvas').releasePointerCapture(ev.pointerId);
+        }
+        $('canvas').addEventListener('pointerup', endDrag);
+        $('canvas').addEventListener('pointercancel', (ev) => {
+          if (drag?.before) design = drag.before;
+          drag = null;
+          render();
+        });
+        $('canvas').addEventListener(
+          'wheel',
+          (ev) => {
+            ev.preventDefault();
+            const p = screenPoint(ev),
+              f = ev.deltaY > 0 ? 1.12 : 1 / 1.12;
+            if (view.w * f < 25 || view.w * f > 2500) return;
+            view = {
+              x: p.x + (view.x - p.x) * f,
+              y: p.y + (view.y - p.y) * f,
+              w: view.w * f,
+              h: view.h * f,
+            };
+            renderScene();
+          },
+          { passive: false },
+        );
+        function zoom(f) {
+          if (view.w * f < 25 || view.w * f > 2500) return;
+          view = {
+            x: view.x + (view.w * (1 - f)) / 2,
+            y: view.y + (view.h * (1 - f)) / 2,
+            w: view.w * f,
+            h: view.h * f,
+          };
+          renderScene();
+        }
+        document
+          .querySelectorAll('[data-add]')
+          .forEach((b) => (b.onclick = () => add(b.dataset.add)));
+        document.querySelectorAll('[data-tab]').forEach(
+          (b) =>
+            (b.onclick = () => {
+              tab = b.dataset.tab;
+              render();
+            }),
+        );
+        $('undo').onclick = undo;
+        $('redo').onclick = redo;
+        $('fit').onclick = fit;
+        $('zoomIn').onclick = () => zoom(1 / 1.2);
+        $('zoomOut').onclick = () => zoom(1.2);
+        $('export').onclick = exportJSON;
+        $('help').onclick = help;
+        $('settings').onclick = settings;
+        $('closeModal').onclick = () => $('modal').close();
+        $('import').onclick = () => $('file').click();
+        $('file').onchange = () => loadFile($('file').files[0]);
+        $('restore').onclick = () => {
+          mutate(() => {
+            design = C.baseline();
+            selected = null;
+          });
+          $('compare').value = 'current';
+          fit();
+          toast('已恢复原始基准；可撤销此操作。');
+        };
+        for (const id of ['grid', 'gridSize', 'compare'])
+          $(id).onchange = () => {
+            if (id === 'compare' && $('compare').value === 'baseline') selected = null;
+            render();
+          };
+        $('applyBoard').onclick = () => {
+          mutate(() => {
+            const b = design.board;
+            b.width = num('boardW');
+            b.height = num('boardH');
+            b.cornerRadius = num('boardR');
+            b.minimumGap = num('boardGap');
+            if (['width', 'height', 'cornerRadius'].some((k) => b[k] !== C.baseline().board[k])) {
+              b.confirmed = false;
+              b.source = '手动修改的外壳草案外形，待实测';
+            }
+          });
+          fit();
+        };
+        $('designName').onchange = () => mutate(() => (design.name = $('designName').value));
+        $('designNotes').onchange = () => mutate(() => (design.notes = $('designNotes').value));
+        $('resume').onclick = () => {
+          try {
+            const pkg = JSON.parse(localStorage.getItem(storageKey));
+            const errors = C.validatePackage(pkg);
+            if (errors.length) throw Error(errors.join('\n'));
+            const before = C.clone(design);
+            design = C.clone(pkg.design);
+            push(before);
+            selected = null;
+            render();
+            fit();
+            $('resume').classList.add('hidden');
+            toast('已恢复浏览器草稿。');
+          } catch (e) {
+            toast('恢复失败：' + e.message, true);
+          }
+        };
+        window.addEventListener('keydown', (ev) => {
+          if ($('modal').open || window.KeyboardDIY?.isOpen()) return;
+          const edit = ev.target.closest('input,textarea,select,[contenteditable]');
+          if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 's') {
+            ev.preventDefault();
+            if (edit) edit.blur();
+            exportJSON();
+            return;
+          }
+          if (edit) return;
+          if (ev.code === 'Space') {
+            space = true;
+            ev.preventDefault();
+          }
+          const cmd = ev.ctrlKey || ev.metaKey,
+            k = ev.key.toLowerCase();
+          if (cmd && k === 'z') {
+            ev.preventDefault();
+            ev.shiftKey ? redo() : undo();
+          } else if (cmd && k === 'y') {
+            ev.preventDefault();
+            redo();
+          } else if (cmd && k === 'd') {
+            ev.preventDefault();
+            duplicate();
+          } else if (ev.key === 'Escape') {
+            selected = null;
+            render();
+          } else if (active() && ['Delete', 'Backspace'].includes(ev.key)) {
+            ev.preventDefault();
+            remove();
+          } else if (active() && k === 'r') {
+            rotate(ev.shiftKey ? -15 : 15);
+          } else if (
+            active() &&
+            ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(ev.key)
+          ) {
+            ev.preventDefault();
+            mutate(() => {
+              const g = active().geometry,
+                delta = ev.shiftKey ? 5 : 1;
+              if (ev.key === 'ArrowUp') g.y -= delta;
+              if (ev.key === 'ArrowDown') g.y += delta;
+              if (ev.key === 'ArrowLeft') g.x -= delta;
+              if (ev.key === 'ArrowRight') g.x += delta;
+              g.confirmed = false;
+              g.source = '键盘移动的草案值，待实测';
+            });
+          }
+        });
+        window.addEventListener('keyup', (ev) => {
+          if (ev.code === 'Space') space = false;
+        });
+        window.addEventListener('blur', () => {
+          space = false;
+          if (drag?.before) {
+            push(drag.before);
+            drag = null;
+            render();
+          }
+        });
+        try {
+          const saved = localStorage.getItem(storageKey);
+          if (saved) {
+            $('resume').classList.remove('hidden');
+            $('draftStatus').textContent = '发现上次草稿；默认仍显示原始基准，可点击恢复。';
+          }
+        } catch (e) {
+          storageOK = false;
+          $('draftStatus').textContent = '浏览器草稿不可用，请导出 JSON 保存。';
+        }
+        render();
+        // Read-only state helpers for reproducible offline QA; editing remains via UI.
+        window.KeyboardLayoutEditor = {
+          getDesign: () => C.clone(design),
+          getPackage: () => C.exportPackage(design),
+          getAnalysis: () => C.analyze(design),
+          loadPackage: (pkg) => {
+            const errors = C.validatePackage(pkg);
+            if (errors.length) throw Error(errors.join('\n'));
+            const before = C.clone(design);
+            design = C.clone(pkg.design);
+            push(before);
+            selected = null;
+            render();
+            fit();
+          },
+          replaceDesign: (d, clearHistory = false) => {
+            const errors = C.validateDesign(d);
+            if (errors.length) throw Error(errors.join('\n'));
+            const before = C.clone(design);
+            design = C.clone(d);
+            if (clearHistory) {
+              history = [];
+              future = [];
+              saveDraft();
+            } else push(before);
+            selected = null;
+            render();
+            fit();
+          },
+          select,
+          fit,
+        };
+      })();
+    </script>
+  </body>
+</html>

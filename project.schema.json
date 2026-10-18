@@ -1,0 +1,2063 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:keyboard-diy-project:schema:2.0.0",
+  "title": "Keyboard DIY Project 2.0.0",
+  "type": "object",
+  "required": [
+    "kind",
+    "schemaVersion",
+    "id",
+    "name",
+    "createdAt",
+    "updatedAt",
+    "baselineId",
+    "sourceContext",
+    "referenceBaseline",
+    "library",
+    "working",
+    "layoutVersions",
+    "tutorialVersions",
+    "notes",
+    "editorDrafts",
+    "stepChecks",
+    "engineeringFiles",
+    "audit"
+  ],
+  "properties": {
+    "kind": {
+      "const": "keyboard-diy-project"
+    },
+    "schemaVersion": {
+      "const": "2.0.0"
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "baselineId": {
+      "const": "bv1nt4y1e7hz-tutorial-reference-v1"
+    },
+    "sourceContext": {
+      "const": {
+        "tutorial": "多媒体机械键盘DIY完整图文教程.pdf",
+        "video": "BV1nT4y1E7Hz",
+        "referenceDate": "2026-10-18",
+        "coordinateSystem": {
+          "unit": "mm",
+          "origin": "top-left of rectangular enclosure draft",
+          "x": "right",
+          "y": "down",
+          "position": "component center",
+          "rotation": "degrees clockwise",
+          "box": "rotated outer envelope; not switch cutout or PCB footprint",
+          "circles": "encoder and jog use diameter width=height"
+        },
+        "geometryStatus": "All baseline physical geometry is illustrative and unmeasured. 93.5 x 111.5 references upper-shell STL XZ extents; it is not a PCB outline.",
+        "files": [
+          "edit_keyboard/config.h",
+          "edit_keyboard/kb.h",
+          "edit_keyboard/rules.mk",
+          "edit_keyboard/keymaps/default/keymap.c",
+          "电路板及电路图/Schematic_Editor_keyboard_2020-07-12_22-10-05.pdf",
+          "3D模型/上盖.stl",
+          "3D模型/底盖.stl"
+        ],
+        "knownIssues": [
+          "原理图矩阵阴极似接 ROW，原 config.h 却写 ROW2COL，必须核对实际连线。",
+          "USB 5V 经 SS14 与 AMS1117-5.0 的供电路径需复核。",
+          "原图 UCAP 电容标 0.1µF，需按 MCU 手册核对；时钟器件与外接电容需核对。",
+          "大转盘 F0 按压只有定义，原固件没有实现读取与发键。",
+          "原 BOM 部分电阻阻值与料号冲突；旧 QMK API 需按固定版本移植。"
+        ],
+        "chapters": {
+          "baseline": "3–10",
+          "schematic": "7、9–11",
+          "pcb": "12",
+          "plate": "8、13",
+          "case": "13、26",
+          "bom": "6–7",
+          "matrix": "9–10、19",
+          "gpio": "10、21–22",
+          "qmk": "17–25",
+          "acceptance": "15、27–29"
+        }
+      }
+    },
+    "referenceBaseline": {
+      "const": {
+        "name": "教程原始布局参考",
+        "notes": "保留原功能关系；物理坐标与组件外包络为示意占位，必须实测。",
+        "board": {
+          "width": 93.5,
+          "height": 111.5,
+          "cornerRadius": 4,
+          "confirmed": false,
+          "source": "上盖 STL 的 XZ 包围范围作外壳草案参考，不是 PCB 外形",
+          "minimumGap": 1
+        },
+        "configuration": {
+          "mcu": "ATmega32U4",
+          "package": "TQFP44",
+          "clockHz": 16000000,
+          "matrix": {
+            "rows": 4,
+            "cols": 4,
+            "rowPins": [
+              "F4",
+              "F5",
+              "F6",
+              "F7"
+            ],
+            "colPins": [
+              "B6",
+              "B5",
+              "B4",
+              "D7"
+            ],
+            "diodeDirection": "ROW2COL",
+            "directionVerified": false
+          },
+          "lighting": {
+            "enabled": true,
+            "count": 13,
+            "dataPin": "F1",
+            "partNumber": null,
+            "supplyV": null
+          },
+          "layers": [
+            "Windows",
+            "Premiere",
+            "DaVinci",
+            "设置"
+          ],
+          "bootloader": null,
+          "qmkCommit": null
+        },
+        "components": [
+          {
+            "id": "ENC0",
+            "type": "encoder",
+            "label": "音量旋钮 K00",
+            "geometry": {
+              "x": 17,
+              "y": 18,
+              "width": 19,
+              "height": 19,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "encoder": {
+                "index": 0,
+                "pinA": "C7",
+                "pinB": "C6",
+                "common": "GND",
+                "resolution": 2,
+                "cw": "KC_AUDIO_VOL_UP",
+                "ccw": "KC_AUDIO_VOL_DOWN"
+              },
+              "press": {
+                "kind": "matrix",
+                "row": 0,
+                "col": 0
+              }
+            },
+            "keycodes": {
+              "0": "KC_MUTE",
+              "1": "KC_MUTE",
+              "2": "KC_MUTE",
+              "3": "RGB_M_T"
+            },
+            "rgb": false,
+            "notes": ""
+          },
+          {
+            "id": "K01",
+            "type": "key",
+            "label": "K01",
+            "geometry": {
+              "x": 36.05,
+              "y": 18,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 0,
+                "col": 1
+              }
+            },
+            "keycodes": {
+              "0": "TO(1)",
+              "1": "TO(2)",
+              "2": "TO(3)",
+              "3": "TO(0)"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K02",
+            "type": "key",
+            "label": "K02",
+            "geometry": {
+              "x": 55.1,
+              "y": 37.05,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 0,
+                "col": 2
+              }
+            },
+            "keycodes": {
+              "0": "KC_3",
+              "1": "KC_W",
+              "2": "LSFT(LCTL(KC_RBRC))",
+              "3": "RGB_M_P"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K03",
+            "type": "key",
+            "label": "K03",
+            "geometry": {
+              "x": 74.15,
+              "y": 37.05,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 0,
+                "col": 3
+              }
+            },
+            "keycodes": {
+              "0": "KC_4",
+              "1": "KC_DEL",
+              "2": "KC_DEL",
+              "3": "RGB_TOG"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K10",
+            "type": "key",
+            "label": "K10",
+            "geometry": {
+              "x": 17,
+              "y": 37.05,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 1,
+                "col": 0
+              }
+            },
+            "keycodes": {
+              "0": "KC_1",
+              "1": "KC_Q",
+              "2": "LSFT(LCTL(KC_LBRC))",
+              "3": "RGB_MOD"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K11",
+            "type": "key",
+            "label": "K11",
+            "geometry": {
+              "x": 36.05,
+              "y": 37.05,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 1,
+                "col": 1
+              }
+            },
+            "keycodes": {
+              "0": "KC_2",
+              "1": "LCTL(KC_K)",
+              "2": "LCTL(KC_SLSH)",
+              "3": "RGB_RMOD"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K12",
+            "type": "key",
+            "label": "K12",
+            "geometry": {
+              "x": 55.1,
+              "y": 56.1,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 1,
+                "col": 2
+              }
+            },
+            "keycodes": {
+              "0": "KC_7",
+              "1": "KC_L",
+              "2": "KC_L",
+              "3": "RGB_SAI"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K13",
+            "type": "key",
+            "label": "K13",
+            "geometry": {
+              "x": 74.15,
+              "y": 56.1,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 1,
+                "col": 3
+              }
+            },
+            "keycodes": {
+              "0": "KC_8",
+              "1": "LCTL(KC_Z)",
+              "2": "LCTL(KC_Z)",
+              "3": "RGB_SAD"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K20",
+            "type": "key",
+            "label": "K20",
+            "geometry": {
+              "x": 17,
+              "y": 56.1,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 2,
+                "col": 0
+              }
+            },
+            "keycodes": {
+              "0": "KC_5",
+              "1": "KC_J",
+              "2": "KC_J",
+              "3": "RGB_HUI"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K21",
+            "type": "key",
+            "label": "K21",
+            "geometry": {
+              "x": 36.05,
+              "y": 56.1,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 2,
+                "col": 1
+              }
+            },
+            "keycodes": {
+              "0": "KC_6",
+              "1": "KC_K",
+              "2": "KC_K",
+              "3": "RGB_HUD"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K22",
+            "type": "key",
+            "label": "K22",
+            "geometry": {
+              "x": 55.1,
+              "y": 75.15,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 2,
+                "col": 2
+              }
+            },
+            "keycodes": {
+              "0": "KC_9",
+              "1": "KC_I",
+              "2": "KC_I",
+              "3": "RGB_VAI"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K23",
+            "type": "key",
+            "label": "K23",
+            "geometry": {
+              "x": 74.15,
+              "y": 75.15,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 2,
+                "col": 3
+              }
+            },
+            "keycodes": {
+              "0": "KC_0",
+              "1": "KC_O",
+              "2": "KC_O",
+              "3": "RGB_VAD"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K32",
+            "type": "key",
+            "label": "K32",
+            "geometry": {
+              "x": 55.1,
+              "y": 94.2,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 3,
+                "col": 2
+              }
+            },
+            "keycodes": {
+              "0": "KC_DEL",
+              "1": "KC_COMM",
+              "2": "KC_F9",
+              "3": "RGB_M_B"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "K33",
+            "type": "key",
+            "label": "K33",
+            "geometry": {
+              "x": 74.15,
+              "y": 94.2,
+              "width": 18,
+              "height": 18,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "input": {
+                "kind": "matrix",
+                "row": 3,
+                "col": 3
+              }
+            },
+            "keycodes": {
+              "0": "KC_ENT",
+              "1": "KC_DOT",
+              "2": "KC_F9",
+              "3": "RGB_M_R"
+            },
+            "rgb": true,
+            "notes": ""
+          },
+          {
+            "id": "JOG1",
+            "type": "jog",
+            "label": "大转盘",
+            "geometry": {
+              "x": 26,
+              "y": 85,
+              "width": 34,
+              "height": 34,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "encoder": {
+                "index": 1,
+                "pinA": "D6",
+                "pinB": "D4",
+                "common": "GND",
+                "resolution": 2,
+                "cw": "KC_LEFT",
+                "ccw": "KC_RIGHT"
+              },
+              "press": {
+                "kind": "direct",
+                "pin": "F0",
+                "keycode": "KC_SPC",
+                "implemented": false
+              }
+            },
+            "keycodes": {},
+            "rgb": false,
+            "notes": ""
+          },
+          {
+            "id": "OLED0",
+            "type": "oled",
+            "label": "层状态 OLED",
+            "geometry": {
+              "x": 64.5,
+              "y": 17,
+              "width": 32,
+              "height": 14,
+              "rotation": 0,
+              "confirmed": false,
+              "source": "教程示意重建，非实测尺寸"
+            },
+            "spec": {
+              "manufacturer": null,
+              "partNumber": null,
+              "footprint": null,
+              "supplyV": null,
+              "confirmed": false
+            },
+            "electrical": {
+              "display": {
+                "bus": "I2C",
+                "sda": "D1",
+                "scl": "D0",
+                "address": null,
+                "controller": null,
+                "resolution": [
+                  128,
+                  64
+                ],
+                "rotation": 180,
+                "supplyV": null
+              }
+            },
+            "keycodes": {},
+            "rgb": false,
+            "notes": ""
+          }
+        ]
+      }
+    },
+    "library": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "sourcePdf",
+        "sourcePdfSha256",
+        "sourcePages",
+        "chapters",
+        "assets",
+        "provenance"
+      ],
+      "properties": {
+        "id": {
+          "const": "keyboard-diy-tutorial-library"
+        },
+        "version": {
+          "const": "2.0.0"
+        },
+        "sourcePdf": {
+          "type": "string"
+        },
+        "sourcePdfSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sourcePages": {
+          "const": 32
+        },
+        "chapters": {
+          "type": "array",
+          "minItems": 32,
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "title",
+              "originalTitle",
+              "sourcePage",
+              "dependsOn",
+              "domains",
+              "principles",
+              "referenceBlocks",
+              "figures"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^ch[0-9]{2}$"
+              },
+              "title": {
+                "type": "string"
+              },
+              "originalTitle": {
+                "type": "string"
+              },
+              "sourcePage": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 32
+              },
+              "dependsOn": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "domains": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "principles": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "p",
+                        "small",
+                        "h",
+                        "table",
+                        "code",
+                        "fig"
+                      ]
+                    }
+                  ],
+                  "items": true
+                }
+              },
+              "referenceBlocks": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "p",
+                        "small",
+                        "h",
+                        "table",
+                        "code",
+                        "fig"
+                      ]
+                    }
+                  ],
+                  "items": true
+                }
+              },
+              "figures": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "p",
+                        "small",
+                        "h",
+                        "table",
+                        "code",
+                        "fig"
+                      ]
+                    }
+                  ],
+                  "items": true
+                }
+              },
+              "templateSteps": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "title",
+                    "instruction",
+                    "check"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^u[A-Za-z0-9_-]+$"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "instruction": {
+                      "type": "string"
+                    },
+                    "check": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "assets": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "dataUri",
+              "sha256",
+              "sourceSha256",
+              "width",
+              "height"
+            ],
+            "properties": {
+              "dataUri": {
+                "type": "string",
+                "pattern": "^data:image/(png|jpeg);base64,[A-Za-z0-9+/=]+$"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "sourceSha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "provenance": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "working": {
+      "type": "object",
+      "required": [
+        "design",
+        "basedOnVersionId"
+      ],
+      "properties": {
+        "design": {
+          "$ref": "#/$defs/design"
+        },
+        "basedOnVersionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "layoutVersions": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "createdAt",
+          "designHash",
+          "design"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^L[0-9]+$"
+          },
+          "label": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "designHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "design": {
+            "$ref": "#/$defs/design"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "tutorialVersions": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "layoutVersionId",
+          "designHash",
+          "contentHash",
+          "createdAt",
+          "model"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^T[0-9]+$"
+          },
+          "layoutVersionId": {
+            "type": "string"
+          },
+          "designHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "contentHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "model": {
+            "type": "object",
+            "required": [
+              "kind",
+              "schemaVersion",
+              "templateVersion",
+              "projectId",
+              "projectName",
+              "layoutVersionId",
+              "designHash",
+              "layout",
+              "chapters",
+              "assetHashes"
+            ],
+            "properties": {
+              "kind": {
+                "const": "keyboard-diy-tutorial"
+              },
+              "schemaVersion": {
+                "const": "2.0.0"
+              },
+              "templateVersion": {
+                "type": "string"
+              },
+              "projectId": {
+                "type": "string"
+              },
+              "projectName": {
+                "type": "string"
+              },
+              "layoutVersionId": {
+                "type": "string"
+              },
+              "designHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "layout": {
+                "$ref": "#/$defs/design"
+              },
+              "chapters": {
+                "type": "array",
+                "minItems": 32,
+                "maxItems": 32,
+                "items": {
+                  "type": "object"
+                }
+              },
+              "assetHashes": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "notes": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^ch[0-9]{2}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "body",
+          "author",
+          "evidence",
+          "confirmed",
+          "dependencyHash",
+          "updatedAt",
+          "origin",
+          "history"
+        ],
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 30000
+          },
+          "author": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "evidence": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "confirmed": {
+            "type": "boolean"
+          },
+          "dependencyHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "origin": {
+            "type": "string"
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "editorDrafts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "body",
+          "author",
+          "evidence",
+          "confirmed"
+        ],
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 30000
+          },
+          "author": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "evidence": {
+            "type": "string",
+            "maxLength": 5000
+          },
+          "confirmed": {
+            "type": "boolean"
+          },
+          "dependencyHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stepChecks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "chapterId",
+          "stepId",
+          "status",
+          "dependencyHash",
+          "notes",
+          "at"
+        ],
+        "properties": {
+          "chapterId": {
+            "type": "string"
+          },
+          "stepId": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "todo",
+              "done",
+              "blocked"
+            ]
+          },
+          "dependencyHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "engineeringFiles": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "category",
+          "revision",
+          "notes",
+          "confirmed",
+          "layoutVersionId",
+          "designHash",
+          "dependencyHash",
+          "sha256",
+          "size",
+          "contentBase64",
+          "createdAt",
+          "history"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "enum": [
+              "schematic",
+              "pcb",
+              "case",
+              "plate",
+              "bom",
+              "firmware",
+              "evidence",
+              "other"
+            ]
+          },
+          "revision": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "confirmed": {
+            "type": "boolean"
+          },
+          "layoutVersionId": {
+            "type": "string"
+          },
+          "designHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "dependencyHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "contentBase64": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "audit": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "at",
+          "action"
+        ],
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "action": {
+            "type": "string"
+          },
+          "detail": {}
+        },
+        "additionalProperties": false
+      }
+    },
+    "aiRequests": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "aiInbox": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "pin": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^[A-F][0-7]$"
+        }
+      ]
+    },
+    "nullableText": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 100
+    },
+    "input": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "row",
+            "col"
+          ],
+          "properties": {
+            "kind": {
+              "const": "matrix"
+            },
+            "row": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0,
+              "maximum": 31
+            },
+            "col": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0,
+              "maximum": 31
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "pin",
+            "keycode",
+            "implemented"
+          ],
+          "properties": {
+            "kind": {
+              "const": "direct"
+            },
+            "pin": {
+              "$ref": "#/$defs/pin"
+            },
+            "keycode": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "implemented": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "geometry": {
+      "type": "object",
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height",
+        "rotation",
+        "confirmed",
+        "source"
+      ],
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": -2000,
+          "maximum": 2000
+        },
+        "y": {
+          "type": "number",
+          "minimum": -2000,
+          "maximum": 2000
+        },
+        "width": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "height": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "rotation": {
+          "type": "number",
+          "minimum": -36000,
+          "maximum": 36000
+        },
+        "confirmed": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "required": [
+        "manufacturer",
+        "partNumber",
+        "footprint",
+        "supplyV",
+        "confirmed"
+      ],
+      "properties": {
+        "manufacturer": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "partNumber": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "footprint": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "supplyV": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 60
+            }
+          ]
+        },
+        "confirmed": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "encoder": {
+      "type": "object",
+      "required": [
+        "index",
+        "pinA",
+        "pinB",
+        "common",
+        "resolution",
+        "cw",
+        "ccw"
+      ],
+      "properties": {
+        "index": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 31
+        },
+        "pinA": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[A-F][0-7]$"
+            }
+          ]
+        },
+        "pinB": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[A-F][0-7]$"
+            }
+          ]
+        },
+        "common": {
+          "const": "GND"
+        },
+        "resolution": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32
+        },
+        "cw": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "ccw": {
+          "type": "string",
+          "maxLength": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "display": {
+      "type": "object",
+      "required": [
+        "bus",
+        "sda",
+        "scl",
+        "address",
+        "controller",
+        "resolution",
+        "rotation",
+        "supplyV"
+      ],
+      "properties": {
+        "bus": {
+          "const": "I2C"
+        },
+        "sda": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[A-F][0-7]$"
+            }
+          ]
+        },
+        "scl": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[A-F][0-7]$"
+            }
+          ]
+        },
+        "address": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 127
+        },
+        "controller": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "resolution": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1024
+          }
+        },
+        "rotation": {
+          "enum": [
+            0,
+            90,
+            180,
+            270
+          ]
+        },
+        "supplyV": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 60
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "component": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "label",
+        "geometry",
+        "spec",
+        "electrical",
+        "keycodes",
+        "rgb",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+        },
+        "type": {
+          "enum": [
+            "key",
+            "encoder",
+            "jog",
+            "oled"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "geometry": {
+          "$ref": "#/$defs/geometry"
+        },
+        "spec": {
+          "$ref": "#/$defs/spec"
+        },
+        "electrical": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "$ref": "#/$defs/input"
+            },
+            "press": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/input"
+                }
+              ]
+            },
+            "encoder": {
+              "$ref": "#/$defs/encoder"
+            },
+            "display": {
+              "$ref": "#/$defs/display"
+            }
+          },
+          "additionalProperties": false
+        },
+        "keycodes": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[0-3]$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "rgb": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 10000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "key"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "electrical": {
+                "required": [
+                  "input"
+                ]
+              },
+              "keycodes": {
+                "required": [
+                  "0",
+                  "1",
+                  "2",
+                  "3"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "encoder",
+                  "jog"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "electrical": {
+                "required": [
+                  "encoder",
+                  "press"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "oled"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "electrical": {
+                "required": [
+                  "display"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "design": {
+      "type": "object",
+      "required": [
+        "name",
+        "notes",
+        "board",
+        "configuration",
+        "components"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 10000
+        },
+        "board": {
+          "type": "object",
+          "required": [
+            "width",
+            "height",
+            "cornerRadius",
+            "confirmed",
+            "source",
+            "minimumGap"
+          ],
+          "properties": {
+            "width": {
+              "type": "number",
+              "minimum": 10,
+              "maximum": 1000
+            },
+            "height": {
+              "type": "number",
+              "minimum": 10,
+              "maximum": 1000
+            },
+            "cornerRadius": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 500
+            },
+            "confirmed": {
+              "type": "boolean"
+            },
+            "source": {
+              "type": "string",
+              "maxLength": 1000
+            },
+            "minimumGap": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          },
+          "additionalProperties": false
+        },
+        "configuration": {
+          "type": "object",
+          "required": [
+            "mcu",
+            "package",
+            "clockHz",
+            "matrix",
+            "lighting",
+            "layers",
+            "bootloader",
+            "qmkCommit"
+          ],
+          "properties": {
+            "mcu": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "package": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "clockHz": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 1000000000
+            },
+            "matrix": {
+              "type": "object",
+              "required": [
+                "rows",
+                "cols",
+                "rowPins",
+                "colPins",
+                "diodeDirection",
+                "directionVerified"
+              ],
+              "properties": {
+                "rows": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 32
+                },
+                "cols": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 32
+                },
+                "rowPins": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-F][0-7]$"
+                      }
+                    ]
+                  },
+                  "minItems": 1,
+                  "maxItems": 32
+                },
+                "colPins": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-F][0-7]$"
+                      }
+                    ]
+                  },
+                  "minItems": 1,
+                  "maxItems": 32
+                },
+                "diodeDirection": {
+                  "enum": [
+                    "ROW2COL",
+                    "COL2ROW"
+                  ]
+                },
+                "directionVerified": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            },
+            "lighting": {
+              "type": "object",
+              "required": [
+                "enabled",
+                "count",
+                "dataPin",
+                "partNumber",
+                "supplyV"
+              ],
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1024
+                },
+                "dataPin": {
+                  "anyOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^[A-F][0-7]$"
+                    }
+                  ]
+                },
+                "partNumber": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 100
+                },
+                "supplyV": {
+                  "anyOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 60
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "layers": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {
+                "type": "string",
+                "maxLength": 100
+              }
+            },
+            "bootloader": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 100
+            },
+            "qmkCommit": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 100
+            }
+          },
+          "additionalProperties": false
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/component"
+          },
+          "maxItems": 200
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$comment": "Cross-field and byte-integrity checks are also performed by project-core.js. Tutorial models and engineering files must be bound to existing layout versions and match hashes. Not a fabrication schema."
+}

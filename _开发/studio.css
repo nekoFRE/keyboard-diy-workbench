@@ -1,0 +1,329 @@
+.studio-nav {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 16px;
+  border-bottom: 1px solid #d6e1e6;
+  background: #e8f1f0;
+  flex-wrap: wrap;
+}
+.studio-nav button {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.studio-nav .project-status {
+  margin-left: auto;
+  font-size: 12px;
+  color: #4b6d76;
+}
+.workspace {
+  height: calc(100vh - 178px);
+}
+.studio {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background: #f1f5f6;
+  display: flex;
+  flex-direction: column;
+}
+.studio-head {
+  background: #173c4b;
+  color: white;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px 15px;
+  min-height: 62px;
+}
+.studio-head strong {
+  margin-right: 10px;
+  font-size: 16px;
+}
+.studio-head button {
+  font-size: 12px;
+}
+.studio-head .primary {
+  background: #d6eee5;
+  color: #174c48;
+  border-color: #d6eee5;
+}
+.studio-head .studio-caption {
+  margin-left: auto;
+  font-size: 11px;
+  color: #c4dadf;
+}
+.studio-body {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}
+.studio-body.project-view,
+.studio-body.files-view,
+.studio-body.ai-view {
+  padding: 25px;
+  max-width: 1250px;
+  width: 100%;
+  margin: auto;
+}
+.studio h2 {
+  font-size: 18px;
+  margin-bottom: 13px;
+}
+.studio h3 {
+  font-size: 15px;
+  margin-top: 20px;
+}
+.studio .card {
+  background: white;
+  border: 1px solid #d6e3e8;
+  border-radius: 9px;
+  padding: 18px;
+  margin: 14px 0;
+}
+.studio .pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.studio .small-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: auto;
+}
+.studio th,
+.studio td {
+  padding: 9px 8px;
+  border-bottom: 1px solid #dce5e9;
+  text-align: left;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+.studio th {
+  background: #ecf3f5;
+}
+.studio .table-scroll {
+  overflow: auto;
+}
+.studio code {
+  font-size: 11px;
+  word-break: break-all;
+}
+.studio button {
+  font-size: 12px;
+}
+.tutorial-view {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  padding: 0;
+  overflow: hidden;
+}
+.tutorial-side {
+  overflow: auto;
+  background: white;
+  border-right: 1px solid #dce4e9;
+  padding: 15px;
+}
+.tutorial-frame-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.tutorial-frame-wrap .frame-bar {
+  background: #e8f1f2;
+  padding: 8px 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+.tutorial-frame {
+  width: 100%;
+  flex: 1;
+  border: 0;
+  min-height: 400px;
+  background: white;
+}
+.chapter-list {
+  max-height: 230px;
+  overflow: auto;
+  border: 1px solid #d9e4e7;
+  border-radius: 6px;
+  margin: 8px 0 14px;
+}
+.chapter-list button {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #e5ecef;
+  border-radius: 0;
+  text-align: left;
+  white-space: normal;
+  font-size: 12px;
+  padding: 7px 9px;
+}
+.chapter-list button.active {
+  background: #e6f4ee;
+  color: #126861;
+}
+.chapter-list small {
+  display: block;
+  color: #6c828c;
+  font-size: 10px;
+  margin-top: 2px;
+}
+.chapter-editor textarea {
+  min-height: 150px;
+  font-size: 12px;
+}
+.chapter-editor label {
+  margin: 7px 0;
+}
+.studio .pending-text {
+  font-size: 12px;
+  background: #fff3df;
+  padding: 8px;
+  color: #82571d;
+  border-radius: 5px;
+}
+.studio .version-line {
+  font-size: 12px;
+  color: #56717e;
+  overflow-wrap: anywhere;
+}
+.studio .step-check {
+  padding: 10px 0;
+  border-top: 1px solid #e0e9ed;
+  font-size: 12px;
+}
+.step-check select {
+  margin-top: 5px;
+  font-size: 12px;
+}
+.studio details {
+  font-size: 12px;
+}
+.studio .text-block {
+  white-space: pre-wrap;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.studio .file-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.studio .status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.studio .status-grid > div {
+  background: #f0f6f6;
+  padding: 12px;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 6px;
+}
+.studio .status-grid b {
+  display: block;
+  font-size: 22px;
+}
+.studio .warning {
+  color: #915920;
+  background: #fff3df;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+.studio .error-text {
+  color: #a53c49;
+}
+.studio a {
+  color: #096c7b;
+}
+.studio .readonly-banner {
+  padding: 8px;
+  background: #fff3df;
+  font-size: 12px;
+}
+.studio .history-note {
+  font-size: 11px;
+  border-top: 1px solid #e0e8eb;
+  padding: 9px 0;
+}
+.studio-body h3:first-child {
+  margin-top: 0;
+}
+.studio-toast {
+  z-index: 20;
+}
+.studio .busy {
+  opacity: 0.6;
+  pointer-events: none;
+}
+@media (max-width: 900px) {
+  .tutorial-view {
+    grid-template-columns: 265px minmax(0, 1fr);
+  }
+  .studio-head strong {
+    font-size: 14px;
+  }
+  .studio-head .studio-caption {
+    width: 100%;
+    margin-left: 0;
+  }
+  .studio .pair {
+    grid-template-columns: 1fr;
+  }
+  .studio-body.project-view,
+  .studio-body.files-view,
+  .studio-body.ai-view {
+    padding: 14px;
+  }
+  .studio .status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 650px) {
+  .tutorial-view {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+  .tutorial-side {
+    max-height: 480px;
+    flex-shrink: 0;
+  }
+  .tutorial-frame-wrap {
+    height: 75vh;
+    min-height: 550px;
+    flex-shrink: 0;
+  }
+  .studio-nav .project-status {
+    width: 100%;
+    margin-left: 0;
+  }
+  .workspace {
+    height: auto;
+  }
+  .studio-head {
+    gap: 5px;
+  }
+  .studio-head strong {
+    width: 100%;
+  }
+  .studio .card {
+    padding: 12px;
+  }
+  .studio .small-table {
+    min-width: 650px;
+  }
+  .chapter-list {
+    max-height: 140px;
+  }
+}

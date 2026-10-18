@@ -1,0 +1,2349 @@
+{
+  "$schema": "urn:keyboard-layout-draft:schema:1.0.0",
+  "kind": "keyboard-layout-draft",
+  "schemaVersion": "1.0.0",
+  "baselineId": "bv1nt4y1e7hz-tutorial-reference-v1",
+  "exportedAt": "2026-10-18T05:07:49.928Z",
+  "sourceContext": {
+    "tutorial": "多媒体机械键盘DIY完整图文教程.pdf",
+    "video": "BV1nT4y1E7Hz",
+    "referenceDate": "2026-10-18",
+    "coordinateSystem": {
+      "unit": "mm",
+      "origin": "top-left of rectangular enclosure draft",
+      "x": "right",
+      "y": "down",
+      "position": "component center",
+      "rotation": "degrees clockwise",
+      "box": "rotated outer envelope; not switch cutout or PCB footprint",
+      "circles": "encoder and jog use diameter width=height"
+    },
+    "geometryStatus": "All baseline physical geometry is illustrative and unmeasured. 93.5 x 111.5 references upper-shell STL XZ extents; it is not a PCB outline.",
+    "files": [
+      "edit_keyboard/config.h",
+      "edit_keyboard/kb.h",
+      "edit_keyboard/rules.mk",
+      "edit_keyboard/keymaps/default/keymap.c",
+      "电路板及电路图/Schematic_Editor_keyboard_2020-07-12_22-10-05.pdf",
+      "3D模型/上盖.stl",
+      "3D模型/底盖.stl"
+    ],
+    "knownIssues": [
+      "原理图矩阵阴极似接 ROW，原 config.h 却写 ROW2COL，必须核对实际连线。",
+      "USB 5V 经 SS14 与 AMS1117-5.0 的供电路径需复核。",
+      "原图 UCAP 电容标 0.1µF，需按 MCU 手册核对；时钟器件与外接电容需核对。",
+      "大转盘 F0 按压只有定义，原固件没有实现读取与发键。",
+      "原 BOM 部分电阻阻值与料号冲突；旧 QMK API 需按固定版本移植。"
+    ],
+    "chapters": {
+      "baseline": "3–10",
+      "schematic": "7、9–11",
+      "pcb": "12",
+      "plate": "8、13",
+      "case": "13、26",
+      "bom": "6–7",
+      "matrix": "9–10、19",
+      "gpio": "10、21–22",
+      "qmk": "17–25",
+      "acceptance": "15、27–29"
+    }
+  },
+  "referenceBaseline": {
+    "name": "教程原始布局参考",
+    "notes": "保留原功能关系；物理坐标与组件外包络为示意占位，必须实测。",
+    "board": {
+      "width": 93.5,
+      "height": 111.5,
+      "cornerRadius": 4,
+      "confirmed": false,
+      "source": "上盖 STL 的 XZ 包围范围作外壳草案参考，不是 PCB 外形",
+      "minimumGap": 1
+    },
+    "configuration": {
+      "mcu": "ATmega32U4",
+      "package": "TQFP44",
+      "clockHz": 16000000,
+      "matrix": {
+        "rows": 4,
+        "cols": 4,
+        "rowPins": [
+          "F4",
+          "F5",
+          "F6",
+          "F7"
+        ],
+        "colPins": [
+          "B6",
+          "B5",
+          "B4",
+          "D7"
+        ],
+        "diodeDirection": "ROW2COL",
+        "directionVerified": false
+      },
+      "lighting": {
+        "enabled": true,
+        "count": 13,
+        "dataPin": "F1",
+        "partNumber": null,
+        "supplyV": null
+      },
+      "layers": [
+        "Windows",
+        "Premiere",
+        "DaVinci",
+        "设置"
+      ],
+      "bootloader": null,
+      "qmkCommit": null
+    },
+    "components": [
+      {
+        "id": "ENC0",
+        "type": "encoder",
+        "label": "音量旋钮 K00",
+        "geometry": {
+          "x": 17,
+          "y": 18,
+          "width": 19,
+          "height": 19,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "encoder": {
+            "index": 0,
+            "pinA": "C7",
+            "pinB": "C6",
+            "common": "GND",
+            "resolution": 2,
+            "cw": "KC_AUDIO_VOL_UP",
+            "ccw": "KC_AUDIO_VOL_DOWN"
+          },
+          "press": {
+            "kind": "matrix",
+            "row": 0,
+            "col": 0
+          }
+        },
+        "keycodes": {
+          "0": "KC_MUTE",
+          "1": "KC_MUTE",
+          "2": "KC_MUTE",
+          "3": "RGB_M_T"
+        },
+        "rgb": false,
+        "notes": ""
+      },
+      {
+        "id": "K01",
+        "type": "key",
+        "label": "K01",
+        "geometry": {
+          "x": 36.05,
+          "y": 18,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 0,
+            "col": 1
+          }
+        },
+        "keycodes": {
+          "0": "TO(1)",
+          "1": "TO(2)",
+          "2": "TO(3)",
+          "3": "TO(0)"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K02",
+        "type": "key",
+        "label": "K02",
+        "geometry": {
+          "x": 55.1,
+          "y": 37.05,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 0,
+            "col": 2
+          }
+        },
+        "keycodes": {
+          "0": "KC_3",
+          "1": "KC_W",
+          "2": "LSFT(LCTL(KC_RBRC))",
+          "3": "RGB_M_P"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K03",
+        "type": "key",
+        "label": "K03",
+        "geometry": {
+          "x": 74.15,
+          "y": 37.05,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 0,
+            "col": 3
+          }
+        },
+        "keycodes": {
+          "0": "KC_4",
+          "1": "KC_DEL",
+          "2": "KC_DEL",
+          "3": "RGB_TOG"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K10",
+        "type": "key",
+        "label": "K10",
+        "geometry": {
+          "x": 17,
+          "y": 37.05,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 1,
+            "col": 0
+          }
+        },
+        "keycodes": {
+          "0": "KC_1",
+          "1": "KC_Q",
+          "2": "LSFT(LCTL(KC_LBRC))",
+          "3": "RGB_MOD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K11",
+        "type": "key",
+        "label": "K11",
+        "geometry": {
+          "x": 36.05,
+          "y": 37.05,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 1,
+            "col": 1
+          }
+        },
+        "keycodes": {
+          "0": "KC_2",
+          "1": "LCTL(KC_K)",
+          "2": "LCTL(KC_SLSH)",
+          "3": "RGB_RMOD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K12",
+        "type": "key",
+        "label": "K12",
+        "geometry": {
+          "x": 55.1,
+          "y": 56.1,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 1,
+            "col": 2
+          }
+        },
+        "keycodes": {
+          "0": "KC_7",
+          "1": "KC_L",
+          "2": "KC_L",
+          "3": "RGB_SAI"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K13",
+        "type": "key",
+        "label": "K13",
+        "geometry": {
+          "x": 74.15,
+          "y": 56.1,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 1,
+            "col": 3
+          }
+        },
+        "keycodes": {
+          "0": "KC_8",
+          "1": "LCTL(KC_Z)",
+          "2": "LCTL(KC_Z)",
+          "3": "RGB_SAD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K20",
+        "type": "key",
+        "label": "K20",
+        "geometry": {
+          "x": 17,
+          "y": 56.1,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 2,
+            "col": 0
+          }
+        },
+        "keycodes": {
+          "0": "KC_5",
+          "1": "KC_J",
+          "2": "KC_J",
+          "3": "RGB_HUI"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K21",
+        "type": "key",
+        "label": "K21",
+        "geometry": {
+          "x": 36.05,
+          "y": 56.1,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 2,
+            "col": 1
+          }
+        },
+        "keycodes": {
+          "0": "KC_6",
+          "1": "KC_K",
+          "2": "KC_K",
+          "3": "RGB_HUD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K22",
+        "type": "key",
+        "label": "K22",
+        "geometry": {
+          "x": 55.1,
+          "y": 75.15,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 2,
+            "col": 2
+          }
+        },
+        "keycodes": {
+          "0": "KC_9",
+          "1": "KC_I",
+          "2": "KC_I",
+          "3": "RGB_VAI"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K23",
+        "type": "key",
+        "label": "K23",
+        "geometry": {
+          "x": 74.15,
+          "y": 75.15,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 2,
+            "col": 3
+          }
+        },
+        "keycodes": {
+          "0": "KC_0",
+          "1": "KC_O",
+          "2": "KC_O",
+          "3": "RGB_VAD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K32",
+        "type": "key",
+        "label": "K32",
+        "geometry": {
+          "x": 55.1,
+          "y": 94.2,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 3,
+            "col": 2
+          }
+        },
+        "keycodes": {
+          "0": "KC_DEL",
+          "1": "KC_COMM",
+          "2": "KC_F9",
+          "3": "RGB_M_B"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K33",
+        "type": "key",
+        "label": "K33",
+        "geometry": {
+          "x": 74.15,
+          "y": 94.2,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 3,
+            "col": 3
+          }
+        },
+        "keycodes": {
+          "0": "KC_ENT",
+          "1": "KC_DOT",
+          "2": "KC_F9",
+          "3": "RGB_M_R"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "JOG1",
+        "type": "jog",
+        "label": "大转盘",
+        "geometry": {
+          "x": 26,
+          "y": 85,
+          "width": 34,
+          "height": 34,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "encoder": {
+            "index": 1,
+            "pinA": "D6",
+            "pinB": "D4",
+            "common": "GND",
+            "resolution": 2,
+            "cw": "KC_LEFT",
+            "ccw": "KC_RIGHT"
+          },
+          "press": {
+            "kind": "direct",
+            "pin": "F0",
+            "keycode": "KC_SPC",
+            "implemented": false
+          }
+        },
+        "keycodes": {},
+        "rgb": false,
+        "notes": ""
+      },
+      {
+        "id": "OLED0",
+        "type": "oled",
+        "label": "层状态 OLED",
+        "geometry": {
+          "x": 64.5,
+          "y": 17,
+          "width": 32,
+          "height": 14,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "display": {
+            "bus": "I2C",
+            "sda": "D1",
+            "scl": "D0",
+            "address": null,
+            "controller": null,
+            "resolution": [
+              128,
+              64
+            ],
+            "rotation": 180,
+            "supplyV": null
+          }
+        },
+        "keycodes": {},
+        "rgb": false,
+        "notes": ""
+      }
+    ]
+  },
+  "design": {
+    "name": "示例 旋钮左移与加宽外形",
+    "notes": "仅示范物理改版：小旋钮左移 2 mm、OLED 下移 1 mm，外壳草案加宽到 99.5 mm。ID、矩阵、GPIO、键码和器件均保留；请看改版分析。",
+    "board": {
+      "width": 99.5,
+      "height": 111.5,
+      "cornerRadius": 4,
+      "confirmed": false,
+      "source": "示例草案加宽，非实测",
+      "minimumGap": 1
+    },
+    "configuration": {
+      "mcu": "ATmega32U4",
+      "package": "TQFP44",
+      "clockHz": 16000000,
+      "matrix": {
+        "rows": 4,
+        "cols": 4,
+        "rowPins": [
+          "F4",
+          "F5",
+          "F6",
+          "F7"
+        ],
+        "colPins": [
+          "B6",
+          "B5",
+          "B4",
+          "D7"
+        ],
+        "diodeDirection": "ROW2COL",
+        "directionVerified": false
+      },
+      "lighting": {
+        "enabled": true,
+        "count": 13,
+        "dataPin": "F1",
+        "partNumber": null,
+        "supplyV": null
+      },
+      "layers": [
+        "Windows",
+        "Premiere",
+        "DaVinci",
+        "设置"
+      ],
+      "bootloader": null,
+      "qmkCommit": null
+    },
+    "components": [
+      {
+        "id": "ENC0",
+        "type": "encoder",
+        "label": "音量旋钮 K00",
+        "geometry": {
+          "x": 15,
+          "y": 18,
+          "width": 19,
+          "height": 19,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "encoder": {
+            "index": 0,
+            "pinA": "C7",
+            "pinB": "C6",
+            "common": "GND",
+            "resolution": 2,
+            "cw": "KC_AUDIO_VOL_UP",
+            "ccw": "KC_AUDIO_VOL_DOWN"
+          },
+          "press": {
+            "kind": "matrix",
+            "row": 0,
+            "col": 0
+          }
+        },
+        "keycodes": {
+          "0": "KC_MUTE",
+          "1": "KC_MUTE",
+          "2": "KC_MUTE",
+          "3": "RGB_M_T"
+        },
+        "rgb": false,
+        "notes": ""
+      },
+      {
+        "id": "K01",
+        "type": "key",
+        "label": "K01",
+        "geometry": {
+          "x": 36.05,
+          "y": 18,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 0,
+            "col": 1
+          }
+        },
+        "keycodes": {
+          "0": "TO(1)",
+          "1": "TO(2)",
+          "2": "TO(3)",
+          "3": "TO(0)"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K02",
+        "type": "key",
+        "label": "K02",
+        "geometry": {
+          "x": 55.1,
+          "y": 37.05,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 0,
+            "col": 2
+          }
+        },
+        "keycodes": {
+          "0": "KC_3",
+          "1": "KC_W",
+          "2": "LSFT(LCTL(KC_RBRC))",
+          "3": "RGB_M_P"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K03",
+        "type": "key",
+        "label": "K03",
+        "geometry": {
+          "x": 74.15,
+          "y": 37.05,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 0,
+            "col": 3
+          }
+        },
+        "keycodes": {
+          "0": "KC_4",
+          "1": "KC_DEL",
+          "2": "KC_DEL",
+          "3": "RGB_TOG"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K10",
+        "type": "key",
+        "label": "K10",
+        "geometry": {
+          "x": 17,
+          "y": 37.05,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 1,
+            "col": 0
+          }
+        },
+        "keycodes": {
+          "0": "KC_1",
+          "1": "KC_Q",
+          "2": "LSFT(LCTL(KC_LBRC))",
+          "3": "RGB_MOD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K11",
+        "type": "key",
+        "label": "K11",
+        "geometry": {
+          "x": 36.05,
+          "y": 37.05,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 1,
+            "col": 1
+          }
+        },
+        "keycodes": {
+          "0": "KC_2",
+          "1": "LCTL(KC_K)",
+          "2": "LCTL(KC_SLSH)",
+          "3": "RGB_RMOD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K12",
+        "type": "key",
+        "label": "K12",
+        "geometry": {
+          "x": 55.1,
+          "y": 56.1,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 1,
+            "col": 2
+          }
+        },
+        "keycodes": {
+          "0": "KC_7",
+          "1": "KC_L",
+          "2": "KC_L",
+          "3": "RGB_SAI"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K13",
+        "type": "key",
+        "label": "K13",
+        "geometry": {
+          "x": 74.15,
+          "y": 56.1,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 1,
+            "col": 3
+          }
+        },
+        "keycodes": {
+          "0": "KC_8",
+          "1": "LCTL(KC_Z)",
+          "2": "LCTL(KC_Z)",
+          "3": "RGB_SAD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K20",
+        "type": "key",
+        "label": "K20",
+        "geometry": {
+          "x": 17,
+          "y": 56.1,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 2,
+            "col": 0
+          }
+        },
+        "keycodes": {
+          "0": "KC_5",
+          "1": "KC_J",
+          "2": "KC_J",
+          "3": "RGB_HUI"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K21",
+        "type": "key",
+        "label": "K21",
+        "geometry": {
+          "x": 36.05,
+          "y": 56.1,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 2,
+            "col": 1
+          }
+        },
+        "keycodes": {
+          "0": "KC_6",
+          "1": "KC_K",
+          "2": "KC_K",
+          "3": "RGB_HUD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K22",
+        "type": "key",
+        "label": "K22",
+        "geometry": {
+          "x": 55.1,
+          "y": 75.15,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 2,
+            "col": 2
+          }
+        },
+        "keycodes": {
+          "0": "KC_9",
+          "1": "KC_I",
+          "2": "KC_I",
+          "3": "RGB_VAI"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K23",
+        "type": "key",
+        "label": "K23",
+        "geometry": {
+          "x": 74.15,
+          "y": 75.15,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 2,
+            "col": 3
+          }
+        },
+        "keycodes": {
+          "0": "KC_0",
+          "1": "KC_O",
+          "2": "KC_O",
+          "3": "RGB_VAD"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K32",
+        "type": "key",
+        "label": "K32",
+        "geometry": {
+          "x": 55.1,
+          "y": 94.2,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 3,
+            "col": 2
+          }
+        },
+        "keycodes": {
+          "0": "KC_DEL",
+          "1": "KC_COMM",
+          "2": "KC_F9",
+          "3": "RGB_M_B"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "K33",
+        "type": "key",
+        "label": "K33",
+        "geometry": {
+          "x": 74.15,
+          "y": 94.2,
+          "width": 18,
+          "height": 18,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "input": {
+            "kind": "matrix",
+            "row": 3,
+            "col": 3
+          }
+        },
+        "keycodes": {
+          "0": "KC_ENT",
+          "1": "KC_DOT",
+          "2": "KC_F9",
+          "3": "RGB_M_R"
+        },
+        "rgb": true,
+        "notes": ""
+      },
+      {
+        "id": "JOG1",
+        "type": "jog",
+        "label": "大转盘",
+        "geometry": {
+          "x": 26,
+          "y": 85,
+          "width": 34,
+          "height": 34,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "encoder": {
+            "index": 1,
+            "pinA": "D6",
+            "pinB": "D4",
+            "common": "GND",
+            "resolution": 2,
+            "cw": "KC_LEFT",
+            "ccw": "KC_RIGHT"
+          },
+          "press": {
+            "kind": "direct",
+            "pin": "F0",
+            "keycode": "KC_SPC",
+            "implemented": false
+          }
+        },
+        "keycodes": {},
+        "rgb": false,
+        "notes": ""
+      },
+      {
+        "id": "OLED0",
+        "type": "oled",
+        "label": "层状态 OLED",
+        "geometry": {
+          "x": 64.5,
+          "y": 18,
+          "width": 32,
+          "height": 14,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "spec": {
+          "manufacturer": null,
+          "partNumber": null,
+          "footprint": null,
+          "supplyV": null,
+          "confirmed": false
+        },
+        "electrical": {
+          "display": {
+            "bus": "I2C",
+            "sda": "D1",
+            "scl": "D0",
+            "address": null,
+            "controller": null,
+            "resolution": [
+              128,
+              64
+            ],
+            "rotation": 180,
+            "supplyV": null
+          }
+        },
+        "keycodes": {},
+        "rgb": false,
+        "notes": ""
+      }
+    ]
+  },
+  "analysis": {
+    "generatedAt": "2026-10-18T05:07:49.929Z",
+    "ruleVersion": "1.0.0",
+    "draftOnly": true,
+    "changes": [
+      {
+        "id": "ENC0",
+        "kind": "geometry",
+        "label": "音量旋钮 K00",
+        "fields": [
+          "x"
+        ],
+        "before": {
+          "x": 17,
+          "y": 18,
+          "width": 19,
+          "height": 19,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "after": {
+          "x": 15,
+          "y": 18,
+          "width": 19,
+          "height": 19,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        }
+      },
+      {
+        "id": "OLED0",
+        "kind": "geometry",
+        "label": "层状态 OLED",
+        "fields": [
+          "y"
+        ],
+        "before": {
+          "x": 64.5,
+          "y": 17,
+          "width": 32,
+          "height": 14,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        },
+        "after": {
+          "x": 64.5,
+          "y": 18,
+          "width": 32,
+          "height": 14,
+          "rotation": 0,
+          "confirmed": false,
+          "source": "教程示意重建，非实测尺寸"
+        }
+      },
+      {
+        "id": "board",
+        "kind": "board",
+        "label": "外形与间隙设置"
+      }
+    ],
+    "summary": {
+      "components": 16,
+      "keys": 13,
+      "matrixAssigned": 14,
+      "matrixCapacity": 16,
+      "gpioUsed": 16,
+      "collisions": 0
+    },
+    "tasks": [
+      {
+        "domain": "pcb",
+        "label": "PCB",
+        "status": "must",
+        "tutorialPages": "12",
+        "reasons": [
+          "组件位置、朝向或外包络改变；需更新物理布局，不代表全部重画电路",
+          "编辑的是外壳草案外形，不是 PCB 轮廓"
+        ],
+        "steps": [
+          "在 EDA 中按 ID 更新器件摆放，保留网络定义，检查局部重布线与 DRC。",
+          "核对现有 PCB 是否仍可装入，必要时才修改 PCB 板边与安装孔。"
+        ]
+      },
+      {
+        "domain": "schematic",
+        "label": "原理图",
+        "status": "unchanged",
+        "tutorialPages": "7、11",
+        "reasons": [
+          "与原始基准相比，未发现必须改动此部分的字段。"
+        ],
+        "steps": [
+          "可保留原定义；原资料已知问题仍需按教程核对。"
+        ]
+      },
+      {
+        "domain": "matrix",
+        "label": "按键矩阵",
+        "status": "unchanged",
+        "tutorialPages": "9–10、19",
+        "reasons": [
+          "与原始基准相比，未发现必须改动此部分的字段。"
+        ],
+        "steps": [
+          "可保留原定义；原资料已知问题仍需按教程核对。"
+        ]
+      },
+      {
+        "domain": "gpio",
+        "label": "GPIO",
+        "status": "unchanged",
+        "tutorialPages": "10、21–22",
+        "reasons": [
+          "与原始基准相比，未发现必须改动此部分的字段。"
+        ],
+        "steps": [
+          "可保留原定义；原资料已知问题仍需按教程核对。"
+        ]
+      },
+      {
+        "domain": "case",
+        "label": "外壳",
+        "status": "must",
+        "tutorialPages": "13、26",
+        "reasons": [
+          "组件几何发生变化",
+          "外形尺寸或圆角变化"
+        ],
+        "steps": [
+          "更新轴孔、屏幕窗、旋钮净空、螺柱与插头避让。",
+          "重建外壳轮廓与装配净空。"
+        ]
+      },
+      {
+        "domain": "plate",
+        "label": "定位板",
+        "status": "must",
+        "tutorialPages": "8、13",
+        "reasons": [
+          "按键或旋转件的机械几何变化",
+          "外壳边界变化"
+        ],
+        "steps": [
+          "重建相应孔位并用真实安装图核对板厚和公差。",
+          "核对定位板边界与固定方式。"
+        ]
+      },
+      {
+        "domain": "bom",
+        "label": "物料清单",
+        "status": "unchanged",
+        "tutorialPages": "6–7",
+        "reasons": [
+          "与原始基准相比，未发现必须改动此部分的字段。"
+        ],
+        "steps": [
+          "可保留原定义；原资料已知问题仍需按教程核对。"
+        ]
+      },
+      {
+        "domain": "qmk",
+        "label": "QMK 固件",
+        "status": "verify",
+        "tutorialPages": "17–25",
+        "reasons": [
+          "物理位置不改变按键行为或矩阵分配"
+        ],
+        "steps": [
+          "保留 ID→矩阵→键码；若使用可视布局元数据，只同步 LAYOUT 坐标与图示。"
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "code": "CLEARANCE",
+        "message": "ENC0 与 K10 净距 0.55 mm",
+        "componentIds": [
+          "ENC0",
+          "K10"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "INPUT_NOT_IMPLEMENTED",
+        "message": "JOG1 的直连按压尚未实现固件",
+        "componentIds": [
+          "JOG1"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "OLED_SPEC",
+        "message": "OLED0 控制器、I²C 地址或供电仍需确认",
+        "componentIds": [
+          "OLED0"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "RGB_SPEC",
+        "message": "RGB 器件型号、额定电压和总电流待确认",
+        "componentIds": [],
+        "severity": "warning"
+      },
+      {
+        "code": "BOARD_DIMENSION",
+        "message": "外壳草案尺寸尚未实测；不是 PCB 尺寸",
+        "componentIds": [],
+        "severity": "warning"
+      },
+      {
+        "code": "DIMENSIONS",
+        "message": "16 个组件的外包络/位置尚未确认",
+        "componentIds": [
+          "ENC0",
+          "K01",
+          "K02",
+          "K03",
+          "K10",
+          "K11",
+          "K12",
+          "K13",
+          "K20",
+          "K21",
+          "K22",
+          "K23",
+          "K32",
+          "K33",
+          "JOG1",
+          "OLED0"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "SPECS",
+        "message": "16 个组件缺少已确认型号或安装封装",
+        "componentIds": [
+          "ENC0",
+          "K01",
+          "K02",
+          "K03",
+          "K10",
+          "K11",
+          "K12",
+          "K13",
+          "K20",
+          "K21",
+          "K22",
+          "K23",
+          "K32",
+          "K33",
+          "JOG1",
+          "OLED0"
+        ],
+        "severity": "warning"
+      },
+      {
+        "code": "DIODE_DIRECTION",
+        "message": "二极管方向尚未实测，原资料图纸与配置有矛盾",
+        "componentIds": [],
+        "severity": "warning"
+      },
+      {
+        "code": "QMK_VERSION",
+        "message": "引导程序与固定 QMK 提交尚未记录",
+        "componentIds": [],
+        "severity": "warning"
+      }
+    ],
+    "collisions": [],
+    "distances": [
+      {
+        "a": "ENC0",
+        "b": "K10",
+        "gapMm": 0.55,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K11",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K03",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K11",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K12",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K13",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "K11",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "K20",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "K21",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K12",
+        "b": "K13",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K12",
+        "b": "K21",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K12",
+        "b": "K22",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K13",
+        "b": "K23",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K20",
+        "b": "K21",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K22",
+        "b": "K23",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K22",
+        "b": "K32",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K23",
+        "b": "K33",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K32",
+        "b": "K33",
+        "gapMm": 1.05,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K02",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K10",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K13",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K21",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K12",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "K21",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "K12",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "K20",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K12",
+        "b": "K23",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K13",
+        "b": "K22",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K21",
+        "b": "K22",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K22",
+        "b": "K33",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "K23",
+        "b": "K32",
+        "gapMm": 1.485,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K01",
+        "gapMm": 2.55,
+        "overlap": false
+      },
+      {
+        "a": "K20",
+        "b": "JOG1",
+        "gapMm": 2.9,
+        "overlap": false
+      },
+      {
+        "a": "K21",
+        "b": "JOG1",
+        "gapMm": 2.928,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "OLED0",
+        "gapMm": 3.05,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "OLED0",
+        "gapMm": 3.05,
+        "overlap": false
+      },
+      {
+        "a": "K32",
+        "b": "JOG1",
+        "gapMm": 3.101,
+        "overlap": false
+      },
+      {
+        "a": "K22",
+        "b": "JOG1",
+        "gapMm": 3.118,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "OLED0",
+        "gapMm": 3.45,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "OLED0",
+        "gapMm": 4.605,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K11",
+        "gapMm": 6.191,
+        "overlap": false
+      },
+      {
+        "a": "K12",
+        "b": "JOG1",
+        "gapMm": 11.285,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K20",
+        "gapMm": 19.6,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K21",
+        "gapMm": 20.1,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K10",
+        "gapMm": 20.1,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K22",
+        "gapMm": 20.1,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K11",
+        "gapMm": 20.1,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K23",
+        "gapMm": 20.1,
+        "overlap": false
+      },
+      {
+        "a": "K12",
+        "b": "K20",
+        "gapMm": 20.1,
+        "overlap": false
+      },
+      {
+        "a": "K12",
+        "b": "K32",
+        "gapMm": 20.1,
+        "overlap": false
+      },
+      {
+        "a": "K13",
+        "b": "K21",
+        "gapMm": 20.1,
+        "overlap": false
+      },
+      {
+        "a": "K13",
+        "b": "K33",
+        "gapMm": 20.1,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K03",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K12",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K20",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K20",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K23",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K21",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K22",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "K12",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "K13",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "K22",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K12",
+        "b": "K33",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K13",
+        "b": "K32",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K20",
+        "b": "K22",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K21",
+        "b": "K23",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K21",
+        "b": "K32",
+        "gapMm": 20.127,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "JOG1",
+        "gapMm": 21.95,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "JOG1",
+        "gapMm": 21.964,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K21",
+        "gapMm": 21.996,
+        "overlap": false
+      },
+      {
+        "a": "K12",
+        "b": "OLED0",
+        "gapMm": 22.1,
+        "overlap": false
+      },
+      {
+        "a": "K13",
+        "b": "OLED0",
+        "gapMm": 22.1,
+        "overlap": false
+      },
+      {
+        "a": "K33",
+        "b": "JOG1",
+        "gapMm": 22.151,
+        "overlap": false
+      },
+      {
+        "a": "K23",
+        "b": "JOG1",
+        "gapMm": 22.159,
+        "overlap": false
+      },
+      {
+        "a": "K21",
+        "b": "OLED0",
+        "gapMm": 22.368,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "OLED0",
+        "gapMm": 22.706,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K02",
+        "gapMm": 23.184,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "OLED0",
+        "gapMm": 24,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "JOG1",
+        "gapMm": 26.83,
+        "overlap": false
+      },
+      {
+        "a": "K13",
+        "b": "JOG1",
+        "gapMm": 26.917,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K13",
+        "gapMm": 28.426,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "K22",
+        "gapMm": 28.426,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "K23",
+        "gapMm": 28.426,
+        "overlap": false
+      },
+      {
+        "a": "K20",
+        "b": "K32",
+        "gapMm": 28.426,
+        "overlap": false
+      },
+      {
+        "a": "K21",
+        "b": "K33",
+        "gapMm": 28.426,
+        "overlap": false
+      },
+      {
+        "a": "K20",
+        "b": "OLED0",
+        "gapMm": 31.538,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K12",
+        "gapMm": 33.091,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "JOG1",
+        "gapMm": 38.225,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K32",
+        "gapMm": 39.15,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K10",
+        "gapMm": 39.15,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K33",
+        "gapMm": 39.15,
+        "overlap": false
+      },
+      {
+        "a": "K13",
+        "b": "K20",
+        "gapMm": 39.15,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K22",
+        "gapMm": 39.164,
+        "overlap": false
+      },
+      {
+        "a": "K02",
+        "b": "K33",
+        "gapMm": 39.164,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K20",
+        "gapMm": 39.164,
+        "overlap": false
+      },
+      {
+        "a": "K03",
+        "b": "K32",
+        "gapMm": 39.164,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "K13",
+        "gapMm": 39.164,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "K32",
+        "gapMm": 39.164,
+        "overlap": false
+      },
+      {
+        "a": "K20",
+        "b": "K23",
+        "gapMm": 39.164,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "JOG1",
+        "gapMm": 41.01,
+        "overlap": false
+      },
+      {
+        "a": "K22",
+        "b": "OLED0",
+        "gapMm": 41.15,
+        "overlap": false
+      },
+      {
+        "a": "K23",
+        "b": "OLED0",
+        "gapMm": 41.15,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "JOG1",
+        "gapMm": 41.397,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K03",
+        "gapMm": 41.647,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K23",
+        "gapMm": 44.008,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "K23",
+        "gapMm": 44.008,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "K32",
+        "gapMm": 44.008,
+        "overlap": false
+      },
+      {
+        "a": "K11",
+        "b": "K33",
+        "gapMm": 44.008,
+        "overlap": false
+      },
+      {
+        "a": "K20",
+        "b": "K33",
+        "gapMm": 44.008,
+        "overlap": false
+      },
+      {
+        "a": "JOG1",
+        "b": "OLED0",
+        "gapMm": 47.08,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K22",
+        "gapMm": 47.82,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K13",
+        "gapMm": 48.481,
+        "overlap": false
+      },
+      {
+        "a": "K10",
+        "b": "K33",
+        "gapMm": 55.366,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K32",
+        "gapMm": 58.209,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K23",
+        "gapMm": 60.023,
+        "overlap": false
+      },
+      {
+        "a": "K32",
+        "b": "OLED0",
+        "gapMm": 60.2,
+        "overlap": false
+      },
+      {
+        "a": "K33",
+        "b": "OLED0",
+        "gapMm": 60.2,
+        "overlap": false
+      },
+      {
+        "a": "K01",
+        "b": "K33",
+        "gapMm": 61.573,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K32",
+        "gapMm": 64.548,
+        "overlap": false
+      },
+      {
+        "a": "ENC0",
+        "b": "K33",
+        "gapMm": 74.35,
+        "overlap": false
+      }
+    ],
+    "knownBaselineIssues": [
+      "原理图矩阵阴极似接 ROW，原 config.h 却写 ROW2COL，必须核对实际连线。",
+      "USB 5V 经 SS14 与 AMS1117-5.0 的供电路径需复核。",
+      "原图 UCAP 电容标 0.1µF，需按 MCU 手册核对；时钟器件与外接电容需核对。",
+      "大转盘 F0 按压只有定义，原固件没有实现读取与发键。",
+      "原 BOM 部分电阻阻值与料号冲突；旧 QMK API 需按固定版本移植。"
+    ],
+    "nextSteps": [
+      "确认外包络、安装孔、PCB 焊盘、模块高度和插头净空。",
+      "逐项完成矩阵/GPIO 分配和器件电气规格记录。",
+      "把此 JSON 作为统一输入分析改版；不能直接交工厂加工或直接刷入固件。"
+    ]
+  }
+}
