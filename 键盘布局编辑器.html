@@ -1947,16 +1947,6 @@
           filter = 'all',
           toastTimer;
         const detailStates = new Map();
-        $('panel').addEventListener(
-          'toggle',
-          (ev) => {
-            if (ev.target.tagName === 'DETAILS') {
-              const summary = ev.target.querySelector('summary');
-              if (summary) detailStates.set(summary.textContent, ev.target.open);
-            }
-          },
-          true,
-        );
         const storageKey = 'keyboard-layout-workbench-v1';
         let storageOK = true;
         const statusName = { must: '必须修改', verify: '重新验证', unchanged: '可保持不变' },
@@ -2165,6 +2155,11 @@
         }
         function renderPanel() {
           const panel = $('panel');
+          // toggle 事件异步派发；重绘前直接读取现有 DOM，保留即时展开状态。
+          panel.querySelectorAll('details').forEach((el) => {
+            const key = el.querySelector('summary')?.textContent;
+            if (key) detailStates.set(key, el.open);
+          });
           if (tab === 'components') {
             panel.innerHTML =
               `<h2>当前组件 <span class="muted">${design.components.length}</span></h2><p class="hint">稳定 ID 用于关联原矩阵和后续改版。拖动不会改变电气映射。</p>` +

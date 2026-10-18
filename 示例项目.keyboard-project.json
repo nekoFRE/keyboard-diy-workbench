@@ -1,10 +1,10 @@
 {
   "kind": "keyboard-diy-project",
   "schemaVersion": "2.0.0",
-  "id": "P-mvdf1u45-orqfwv",
+  "id": "P-mvdf5iu9-mrjllq",
   "name": "键盘 DIY 持续设计示例",
-  "createdAt": "2026-10-18T06:00:02.741Z",
-  "updatedAt": "2026-10-18T06:00:02.786Z",
+  "createdAt": "2026-10-18T06:02:54.753Z",
+  "updatedAt": "2026-10-18T06:02:54.798Z",
   "baselineId": "bv1nt4y1e7hz-tutorial-reference-v1",
   "sourceContext": {
     "tutorial": "多媒体机械键盘DIY完整图文教程.pdf",
@@ -4637,7 +4637,7 @@
     {
       "id": "L001",
       "label": "初始布局",
-      "createdAt": "2026-10-18T06:00:02.747Z",
+      "createdAt": "2026-10-18T06:02:54.760Z",
       "designHash": "0a184d2f5188c9e5739418b09cc71934ef870841bbaa0e4877fbcba360502f60",
       "design": {
         "name": "教程原始布局参考",
@@ -5291,13 +5291,13 @@
       "id": "T001",
       "layoutVersionId": "L001",
       "designHash": "0a184d2f5188c9e5739418b09cc71934ef870841bbaa0e4877fbcba360502f60",
-      "contentHash": "f3b70807c2418db8045fb2d30808ffad3ad25ee13ec50c1b6ba3e93caadf0615",
-      "createdAt": "2026-10-18T06:00:02.785Z",
+      "contentHash": "b18c07e443dc7f2683b8cbd6c2bf6721f9f7b8748fa845d6bd0a8cf29e4ba5df",
+      "createdAt": "2026-10-18T06:02:54.797Z",
       "model": {
         "kind": "keyboard-diy-tutorial",
         "schemaVersion": "2.0.0",
         "templateVersion": "2.0.0",
-        "projectId": "P-mvdf1u45-orqfwv",
+        "projectId": "P-mvdf5iu9-mrjllq",
         "projectName": "键盘 DIY 持续设计示例",
         "layoutVersionId": "L001",
         "designHash": "0a184d2f5188c9e5739418b09cc71934ef870841bbaa0e4877fbcba360502f60",
@@ -11577,12 +11577,12 @@
   "engineeringFiles": [],
   "audit": [
     {
-      "at": "2026-10-18T06:00:02.747Z",
+      "at": "2026-10-18T06:02:54.760Z",
       "action": "save-layout",
       "detail": "L001"
     },
     {
-      "at": "2026-10-18T06:00:02.786Z",
+      "at": "2026-10-18T06:02:54.798Z",
       "action": "save-tutorial",
       "detail": "T001"
     }

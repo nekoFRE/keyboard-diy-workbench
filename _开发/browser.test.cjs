@@ -206,6 +206,16 @@ const out = path.dirname(__dirname),
     assert.ok(await page.locator('#specPart').isVisible());
     await change('specPart', '待确认型号');
     assert.ok(await page.locator('#specFootprint').isVisible());
+    await page.evaluate(() => {
+      const input = document.getElementById('specManufacturer');
+      const details = input.closest('details');
+      // 同一事件循环内展开并编辑，不能依赖延后派发的 toggle 事件。
+      details.open = false;
+      details.open = true;
+      input.value = '立即填写的厂家';
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    assert.ok(await page.locator('#specPart').isVisible());
     assert.equal((await analysis()).tasks.find((t) => t.domain === 'pcb').status, 'verify');
     await reset();
   });
@@ -235,7 +245,7 @@ const out = path.dirname(__dirname),
   fs.writeFileSync(
     path.join(__dirname, '浏览器验证结果.json'),
     JSON.stringify(
-      { passed: true, checks: results, browser: 'Chrome 155 headless; direct file URL', errors },
+      { passed: true, checks: results, browser: `Chromium ${browser.version()}; file URL`, errors },
       null,
       2,
     ),
