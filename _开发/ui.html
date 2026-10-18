@@ -156,6 +156,39 @@
         color: var(--muted);
         font-size: 12px;
       }
+      .canvas-tools {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 7px 16px;
+        background: #eff6f3;
+        border-bottom: 1px solid var(--line);
+      }
+      .canvas-tools .tool-group {
+        display: flex;
+        gap: 3px;
+        flex-wrap: wrap;
+      }
+      .canvas-tools button {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+      .canvas-tools button[aria-pressed='true'] {
+        background: var(--teal);
+        color: white;
+        border-color: var(--teal);
+      }
+      .canvas-tools select {
+        width: auto;
+        padding: 5px;
+      }
+      #toolHint {
+        font-size: 12px;
+        color: #4b6c73;
+        flex: 1;
+        min-width: 200px;
+      }
       .workspace {
         height: calc(100vh - 135px);
         min-height: 660px;
@@ -662,6 +695,21 @@
       ><button id="settings">全局电气设置</button
       ><span class="right">拖动移动 · 拖圆点旋转 · 拖方块缩放 · 滚轮缩放 · 空格拖动画布</span>
     </div>
+    <div class="canvas-tools" role="toolbar" aria-label="画布光标工具">
+      <label for="editTarget">编辑对象</label
+      ><select id="editTarget">
+        <option value="component">组件</option>
+        <option value="board">外壳草案</option>
+      </select>
+      <div class="tool-group" role="group" aria-label="光标模式">
+        <button data-tool="select" title="V：只选择，不拖动">↖ 选择</button>
+        <button data-tool="move" title="M：移动组件，也可拖动手柄">✥ 移动</button>
+        <button data-tool="resize" title="S：拖边或角缩放">⤢ 缩放</button>
+        <button data-tool="rotate" title="T：围绕中心旋转">↻ 旋转</button>
+        <button data-tool="pan" title="H：平移画布">✋ 平移</button>
+      </div>
+      <output id="toolHint" aria-live="polite"></output>
+    </div>
     <main class="workspace">
       <aside class="left">
         <section>
@@ -747,6 +795,7 @@
     </dialog>
     <script>
       /*__CORE__*/
+      /*__TRANSFORM__*/
     </script>
     <script>
       (function () {
@@ -767,6 +816,8 @@
           view = { x: -18, y: -15, w: 129.5, h: 146.5 },
           drag = null,
           space = false,
+          tool = 'move',
+          editTarget = 'component',
           filter = 'all',
           toastTimer;
         const detailStates = new Map();
@@ -820,6 +871,7 @@
           return design.components.find((c) => c.id === selected);
         }
         function select(id) {
+          editTarget = 'component';
           selected = id;
           tab = 'properties';
           render();
@@ -892,7 +944,7 @@
                 : c.electrical.encoder?.index === null
                   ? '索引待定'
                   : '#' + c.electrical.encoder?.index;
-          return `<g transform="translate(${g.x} ${g.y}) rotate(${g.rotation})" ${ghost ? 'pointer-events="none"' : `data-id="${esc(c.id)}" style="cursor:${$('compare').value === 'baseline' ? 'default' : 'move'}"`}>${shape}<text class="canvas-label" text-anchor="middle" y="-.3" font-size="${Math.max(1.4, Math.min(2.7, g.width / 5))}" fill="${c.type === 'oled' && !ghost ? '#d8f1e5' : '#254251'}">${esc(label)}</text><text class="canvas-label" text-anchor="middle" y="3" font-size="1.7" fill="${c.type === 'oled' && !ghost ? '#acd2ca' : '#647e8a'}">${esc(line2.slice(0, 16))}</text></g>`;
+          return `<g transform="translate(${g.x} ${g.y}) rotate(${g.rotation})" ${ghost ? 'pointer-events="none"' : `data-id="${esc(c.id)}" style="cursor:${$('compare').value === 'baseline' || editTarget === 'board' ? 'default' : tool === 'pan' ? 'grab' : tool === 'rotate' ? 'crosshair' : tool === 'move' ? 'move' : 'default'}"`}>${shape}<text class="canvas-label" text-anchor="middle" y="-.3" font-size="${Math.max(1.4, Math.min(2.7, g.width / 5))}" fill="${c.type === 'oled' && !ghost ? '#d8f1e5' : '#254251'}">${esc(label)}</text><text class="canvas-label" text-anchor="middle" y="3" font-size="1.7" fill="${c.type === 'oled' && !ghost ? '#acd2ca' : '#647e8a'}">${esc(line2.slice(0, 16))}</text></g>`;
         }
         function renderScene() {
           if (!report) report = C.analyze(design);
@@ -901,6 +953,34 @@
             mode = $('compare').value,
             baseline = C.baseline();
           svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
+          const readOnly = mode === 'baseline';
+          $('editTarget').value = editTarget;
+          document.querySelectorAll('[data-tool]').forEach((button) => {
+            button.setAttribute('aria-pressed', String(button.dataset.tool === tool));
+            button.disabled =
+              editTarget === 'board' && ['move', 'rotate'].includes(button.dataset.tool);
+          });
+          svg.style.cursor =
+            drag?.kind === 'pan'
+              ? 'grabbing'
+              : tool === 'pan'
+                ? 'grab'
+                : tool === 'rotate'
+                  ? 'crosshair'
+                  : tool === 'move'
+                    ? 'move'
+                    : 'default';
+          $('toolHint').textContent = readOnly
+            ? '原始基准只读；切回当前草案后编辑。'
+            : editTarget === 'board'
+              ? '外壳左上角固定：拖右边/下边/右下角缩放，橙点调圆角；Esc 取消拖动。'
+              : {
+                  select: '鼠标只选择，不拖动；需要拖拽时切换模式。',
+                  move: '拖组件移动；拖边角缩放、拖圆点旋转；Esc 取消拖动。',
+                  resize: '选中后拖边或角缩放；Shift 保持比例，Alt 从中心缩放。',
+                  rotate: '选中后拖组件或圆点旋转；Shift 吸附 15°。',
+                  pan: '拖动画布平移；滚轮缩放视图，不改变设计。',
+                }[tool];
           const grid = Number($('gridSize').value);
           let content = `<defs><pattern id="smallGrid" x="0" y="0" width="${grid}" height="${grid}" patternUnits="userSpaceOnUse"><path d="M ${grid} 0 L 0 0 0 ${grid}" fill="none" stroke="#cbd9df" stroke-width=".13"/></pattern><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1.6" stdDeviation="1.8" flood-color="#617e90" flood-opacity=".16"/></filter></defs><rect x="${view.x}" y="${view.y}" width="${view.w}" height="${view.h}" fill="${$('grid').checked ? 'url(#smallGrid)' : '#edf2f5'}"/>`;
           const board = mode === 'baseline' ? baseline.board : b;
@@ -927,9 +1007,26 @@
             tick(-7, board.height, -3, board.height) +
             `<text transform="translate(-7 ${board.height / 2}) rotate(-90)" text-anchor="middle" font-size="2.3" fill="#4a6b7b">${fmt(board.height)} mm</text>`;
           const c = active();
-          if (c && mode !== 'baseline') {
+          if (c && mode !== 'baseline' && editTarget === 'component') {
             const g = c.geometry;
-            content += `<g transform="translate(${g.x} ${g.y}) rotate(${g.rotation})"><rect x="${-g.width / 2 - 1}" y="${-g.height / 2 - 1}" width="${g.width + 2}" height="${g.height + 2}" fill="none" stroke="#07868a" stroke-width=".3" stroke-dasharray="1 1" pointer-events="none"/><line x1="0" y1="${-g.height / 2}" x2="0" y2="${-g.height / 2 - 5}" stroke="#07868a" stroke-width=".35"/><circle data-handle="rotate" cx="0" cy="${-g.height / 2 - 5}" r="1.5" fill="white" stroke="#07868a" stroke-width=".5" style="cursor:grab"/><rect data-handle="resize" x="${g.width / 2 - 1.2}" y="${g.height / 2 - 1.2}" width="2.4" height="2.4" fill="white" stroke="#07868a" stroke-width=".45" style="cursor:nwse-resize"/></g>`;
+            const grip = 11 / Math.max(0.01, svg.getScreenCTM().a);
+            const handles = ['move', 'resize'].includes(tool)
+              ? Object.entries(KeyboardTransform.directions)
+                  .filter(([key]) => !C.circular(c) || key.length === 1)
+                  .map(([key, [sx, sy]]) => {
+                    const angle =
+                      ((((Math.atan2(sy, sx) * 180) / Math.PI + g.rotation) % 180) + 180) % 180;
+                    const cursor = ['ew-resize', 'nwse-resize', 'ns-resize', 'nesw-resize'][
+                      Math.round(angle / 45) % 4
+                    ];
+                    return `<rect data-handle="resize" data-direction="${key}" x="${(sx * g.width) / 2 - grip / 2}" y="${(sy * g.height) / 2 - grip / 2}" width="${grip}" height="${grip}" fill="white" stroke="#07868a" stroke-width="1.4" vector-effect="non-scaling-stroke" style="cursor:${cursor}"/>`;
+                  })
+                  .join('')
+              : '';
+            const rotateHandle = ['move', 'rotate'].includes(tool)
+              ? `<line x1="0" y1="${-g.height / 2}" x2="0" y2="${-g.height / 2 - 6}" stroke="#07868a" stroke-width=".3" pointer-events="none"/><circle data-handle="rotate" cx="0" cy="${-g.height / 2 - 6}" r="${grip * 0.6}" fill="white" stroke="#07868a" stroke-width="1.5" vector-effect="non-scaling-stroke" style="cursor:crosshair"/>`
+              : '';
+            content += `<g transform="translate(${g.x} ${g.y}) rotate(${g.rotation})"><rect x="${-g.width / 2 - 1}" y="${-g.height / 2 - 1}" width="${g.width + 2}" height="${g.height + 2}" fill="none" stroke="#07868a" stroke-width=".3" stroke-dasharray="1 1" pointer-events="none"/>${rotateHandle}${handles}</g>`;
             const near = report.distances
               .filter((v) => (v.a === c.id || v.b === c.id) && !v.overlap)
               .slice(0, 1);
@@ -944,11 +1041,45 @@
               }
             }
           }
+          if (editTarget === 'board' && !readOnly) {
+            content += `<rect x="0" y="0" width="${b.width}" height="${b.height}" rx="${b.cornerRadius}" fill="none" stroke="#07868a" stroke-width=".6" pointer-events="none"/>`;
+            if (tool === 'resize') {
+              const grip = 12 / Math.max(0.01, svg.getScreenCTM().a);
+              content += [
+                ['e', b.width, b.height / 2, 'ew-resize'],
+                ['s', b.width / 2, b.height, 'ns-resize'],
+                ['se', b.width, b.height, 'nwse-resize'],
+              ]
+                .map(
+                  ([direction, x, y, cursor]) =>
+                    `<rect data-board-handle="${direction}" x="${x - grip / 2}" y="${y - grip / 2}" width="${grip}" height="${grip}" fill="white" stroke="#07868a" stroke-width="1.5" vector-effect="non-scaling-stroke" style="cursor:${cursor}"/>`,
+                )
+                .join('');
+              content += `<circle data-board-handle="radius" cx="${b.cornerRadius}" cy="0" r="${grip * 0.6}" fill="#f7c475" stroke="#a76818" stroke-width="1.5" vector-effect="non-scaling-stroke" style="cursor:ew-resize"/>`;
+            }
+          }
           svg.innerHTML = content;
           $('canvasStatus').textContent =
             mode === 'baseline'
               ? '原始基准只读'
               : `${design.components.length} 组件 · ${report.summary.collisions} 处重叠 · ${report.issues.filter((v) => v.severity === 'error').length} 项冲突`;
+          if (drag && drag.kind !== 'pan') {
+            const g = active()?.geometry;
+            $('canvasStatus').textContent =
+              drag.kind === 'board'
+                ? `外壳 ${fmt(b.width)} × ${fmt(b.height)} mm · 圆角 ${fmt(b.cornerRadius)} mm`
+                : g
+                  ? `${active().id} · ${fmt(g.width)} × ${fmt(g.height)} mm · ${fmt(g.rotation)}°`
+                  : $('canvasStatus').textContent;
+            ['boardW', 'boardH', 'boardR'].forEach(
+              (id, i) => ($(id).value = [b.width, b.height, b.cornerRadius][i]),
+            );
+            if (g)
+              ['propX', 'propY', 'propW', 'propH', 'propR'].forEach((id, i) => {
+                if ($(id))
+                  $(id).value = Number([g.x, g.y, g.width, g.height, g.rotation][i].toFixed(3));
+              });
+          }
         }
         function field(label, id, value, type = 'text', extra = '') {
           return `<label>${esc(label)}<input id="${id}" type="${type}" value="${esc(value)}" ${extra}></label>`;
@@ -983,6 +1114,11 @@
             const key = el.querySelector('summary')?.textContent;
             if (key) detailStates.set(key, el.open);
           });
+          if (editTarget === 'board' && tab === 'properties') {
+            panel.innerHTML =
+              '<h2>外壳草案</h2><p>使用“缩放”模式拖右边、下边或右下角；橙色圆点沿顶边调圆角。</p><p>左上角固定为坐标原点，内部组件保持原位。左侧尺寸框与画布读数同步更新，松开鼠标后更新改版分析和教程。</p><p class="notice">这里只编辑矩形/圆角矩形外包络，不生成可加工外壳，也不直接修改 PCB 板边。</p>';
+            return;
+          }
           if (tab === 'components') {
             panel.innerHTML =
               `<h2>当前组件 <span class="muted">${design.components.length}</span></h2><p class="hint">稳定 ID 用于关联原矩阵和后续改版。拖动不会改变电气映射。</p>` +
@@ -1252,6 +1388,7 @@
           return c;
         }
         function add(type) {
+          editTarget = 'component';
           if ($('compare').value === 'baseline') $('compare').value = 'current';
           mutate(() => {
             const c = newComponent(type);
@@ -1271,6 +1408,7 @@
           });
         }
         function duplicate() {
+          editTarget = 'component';
           const c = active();
           if (!c) return;
           mutate(() => {
@@ -1472,95 +1610,173 @@
             ? Math.round(v / Number($('snapSize').value)) * Number($('snapSize').value)
             : v;
         }
+        function cancelDrag() {
+          if (!drag) return;
+          const previous = drag;
+          if (previous.before) design = previous.before;
+          if (previous.kind === 'pan') view = previous.view;
+          drag = null;
+          if ($('canvas').hasPointerCapture(previous.pointerId))
+            $('canvas').releasePointerCapture(previous.pointerId);
+          render();
+        }
+        function setTool(next) {
+          if (editTarget === 'board' && ['move', 'rotate'].includes(next)) return;
+          cancelDrag();
+          tool = next;
+          renderScene();
+        }
+        document
+          .querySelectorAll('[data-tool]')
+          .forEach((button) => (button.onclick = () => setTool(button.dataset.tool)));
+        $('editTarget').onchange = () => {
+          cancelDrag();
+          editTarget = $('editTarget').value;
+          selected = null;
+          if (editTarget === 'board' && ['move', 'rotate'].includes(tool)) tool = 'resize';
+          render();
+        };
         $('canvas').addEventListener('pointerdown', (ev) => {
           if (ev.button !== 0 && ev.button !== 1) return;
           const p = screenPoint(ev);
-          if (space || ev.button === 1) {
-            drag = { kind: 'pan', start: p, view: { ...view } };
-            $('canvas').setPointerCapture(ev.pointerId);
-            ev.preventDefault();
-            return;
-          }
-          if ($('compare').value === 'baseline') {
-            toast('原始基准只读；切换到当前草案后编辑。');
-            return;
-          }
-          const handle = ev.target.closest('[data-handle]'),
-            node = ev.target.closest('[data-id]');
-          if (handle && active()) {
+          if (space || ev.button === 1 || tool === 'pan') {
             drag = {
-              kind: handle.dataset.handle,
+              kind: 'pan',
               start: p,
-              before: C.clone(design),
-              g: C.clone(active().geometry),
-              id: selected,
-            };
-          } else if (node) {
-            select(node.dataset.id);
-            drag = {
-              kind: 'move',
-              start: p,
-              before: C.clone(design),
-              g: C.clone(active().geometry),
-              id: selected,
+              view: { ...view },
+              client: { x: ev.clientX, y: ev.clientY },
+              scale: $('canvas').getScreenCTM().a,
+              pointerId: ev.pointerId,
             };
           } else {
-            selected = null;
-            render();
-            return;
+            if ($('compare').value === 'baseline') {
+              toast('原始基准只读；切换到当前草案后编辑。');
+              return;
+            }
+            const boardHandle = ev.target.closest('[data-board-handle]');
+            if (editTarget === 'board') {
+              if (!boardHandle || tool !== 'resize') return;
+              drag = {
+                kind: 'board',
+                direction: boardHandle.dataset.boardHandle,
+                start: p,
+                before: C.clone(design),
+                board: C.clone(design.board),
+                pointerId: ev.pointerId,
+              };
+            } else {
+              const handle = ev.target.closest('[data-handle]'),
+                node = ev.target.closest('[data-id]');
+              if (handle && active()) {
+                drag = {
+                  kind: handle.dataset.handle,
+                  direction: handle.dataset.direction,
+                  start: p,
+                  before: C.clone(design),
+                  g: C.clone(active().geometry),
+                  id: selected,
+                  pointerId: ev.pointerId,
+                };
+              } else if (node) {
+                select(node.dataset.id);
+                if (!['move', 'rotate'].includes(tool)) return;
+                if (
+                  tool === 'rotate' &&
+                  Math.hypot(p.x - active().geometry.x, p.y - active().geometry.y) < 0.5
+                ) {
+                  toast('请拖组件边缘或顶部圆点旋转。');
+                  return;
+                }
+                drag = {
+                  kind: tool,
+                  start: p,
+                  before: C.clone(design),
+                  g: C.clone(active().geometry),
+                  id: selected,
+                  pointerId: ev.pointerId,
+                };
+              } else {
+                selected = null;
+                render();
+                return;
+              }
+            }
           }
           $('canvas').setPointerCapture(ev.pointerId);
+          renderScene();
           ev.preventDefault();
         });
         $('canvas').addEventListener('pointermove', (ev) => {
           if (!drag) return;
-          const p = screenPoint(ev);
           if (drag.kind === 'pan') {
-            view.x += drag.start.x - p.x;
-            view.y += drag.start.y - p.y;
+            view = {
+              ...drag.view,
+              x: drag.view.x - (ev.clientX - drag.client.x) / drag.scale,
+              y: drag.view.y - (ev.clientY - drag.client.y) / drag.scale,
+            };
             renderScene();
             return;
           }
-          const c = design.components.find((c) => c.id === drag.id);
-          if (!c) return;
-          const g = c.geometry,
-            z = drag.g;
-          if (drag.kind === 'move') {
-            g.x = Math.max(-2000, Math.min(2000, snapped(z.x + p.x - drag.start.x)));
-            g.y = Math.max(-2000, Math.min(2000, snapped(z.y + p.y - drag.start.y)));
-          } else if (drag.kind === 'rotate') {
-            const a = ((Math.atan2(p.y - z.y, p.x - z.x) * 180) / Math.PI + 90 + 360) % 360;
-            g.rotation = ev.shiftKey ? Math.round(a / 15) * 15 : Math.round(a);
+          const p = screenPoint(ev),
+            step = $('snap').checked ? Number($('snapSize').value) : 0;
+          if (drag.kind === 'board') {
+            design.board = KeyboardTransform.board(drag.board, drag.direction, drag.start, p, step);
+            if (
+              ['width', 'height', 'cornerRadius'].some((k) => design.board[k] !== drag.board[k])
+            ) {
+              design.board.confirmed = false;
+              design.board.source = '画布拖拽的外壳草案，待实测';
+            }
           } else {
-            const a = (z.rotation * Math.PI) / 180,
-              dx = p.x - z.x,
-              dy = p.y - z.y;
-            let w = Math.max(1, Math.min(500, Math.abs(dx * Math.cos(a) + dy * Math.sin(a)) * 2)),
-              h = Math.max(1, Math.min(500, Math.abs(-dx * Math.sin(a) + dy * Math.cos(a)) * 2));
-            g.width = Math.max(1, snapped(w));
-            g.height = C.circular(c) ? g.width : Math.max(1, snapped(h));
+            const c = design.components.find((c) => c.id === drag.id);
+            if (!c) return;
+            const z = drag.g;
+            if (drag.kind === 'move')
+              c.geometry = {
+                ...z,
+                x: Math.max(-2000, Math.min(2000, snapped(z.x + p.x - drag.start.x))),
+                y: Math.max(-2000, Math.min(2000, snapped(z.y + p.y - drag.start.y))),
+              };
+            else if (drag.kind === 'rotate')
+              c.geometry = KeyboardTransform.rotate(z, drag.start, p, ev.shiftKey ? 15 : 0);
+            else
+              c.geometry = KeyboardTransform.resize(z, drag.direction, drag.start, p, {
+                step,
+                circular: C.circular(c),
+                aspect: ev.shiftKey,
+                center: ev.altKey,
+              });
+            if (
+              ['x', 'y', 'width', 'height', 'rotation'].some(
+                (k) => Math.abs(c.geometry[k] - z[k]) > 1e-8,
+              )
+            ) {
+              c.geometry.confirmed = false;
+              c.geometry.source = '画布拖拽的组件草案，待实测';
+            } else c.geometry = C.clone(z);
           }
-          g.confirmed = false;
-          g.source = '拖拽生成的草案值，待实测';
           report = C.analyze(design);
           renderScene();
         });
         function endDrag(ev) {
           if (!drag) return;
-          const d = drag;
+          const previous = drag;
           drag = null;
-          if (d.kind !== 'pan') {
-            push(d.before);
-            render();
+          if (previous.before) {
+            const errors = C.validateDesign(design);
+            if (errors.length) {
+              design = previous.before;
+              toast(errors[0], true);
+            } else push(previous.before);
           }
           if ($('canvas').hasPointerCapture(ev.pointerId))
             $('canvas').releasePointerCapture(ev.pointerId);
+          render();
         }
         $('canvas').addEventListener('pointerup', endDrag);
-        $('canvas').addEventListener('pointercancel', (ev) => {
-          if (drag?.before) design = drag.before;
-          drag = null;
-          render();
+        $('canvas').addEventListener('pointercancel', cancelDrag);
+        $('canvas').addEventListener('lostpointercapture', () => {
+          if (drag) cancelDrag();
         });
         $('canvas').addEventListener(
           'wheel',
@@ -1667,6 +1883,23 @@
             return;
           }
           if (edit) return;
+          if (ev.key === 'Escape' && drag) {
+            ev.preventDefault();
+            cancelDrag();
+            return;
+          }
+          if (
+            !ev.ctrlKey &&
+            !ev.metaKey &&
+            !ev.altKey &&
+            ['v', 'm', 's', 't', 'h'].includes(ev.key.toLowerCase())
+          ) {
+            setTool(
+              { v: 'select', m: 'move', s: 'resize', t: 'rotate', h: 'pan' }[ev.key.toLowerCase()],
+            );
+            ev.preventDefault();
+            return;
+          }
           if (ev.code === 'Space') {
             space = true;
             ev.preventDefault();
@@ -1712,11 +1945,7 @@
         });
         window.addEventListener('blur', () => {
           space = false;
-          if (drag?.before) {
-            push(drag.before);
-            drag = null;
-            render();
-          }
+          cancelDrag();
         });
         try {
           const saved = localStorage.getItem(storageKey);
@@ -1735,6 +1964,7 @@
           getPackage: () => C.exportPackage(design),
           getAnalysis: () => C.analyze(design),
           loadPackage: (pkg) => {
+            editTarget = 'component';
             const errors = C.validatePackage(pkg);
             if (errors.length) throw Error(errors.join('\n'));
             const before = C.clone(design);
@@ -1745,6 +1975,7 @@
             fit();
           },
           replaceDesign: (d, clearHistory = false) => {
+            editTarget = 'component';
             const errors = C.validateDesign(d);
             if (errors.length) throw Error(errors.join('\n'));
             const before = C.clone(design);

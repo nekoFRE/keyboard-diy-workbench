@@ -283,6 +283,9 @@ dialog img {
   #guide-4 figure img {
     max-height: 97mm;
   }
+  #guide-3 figure img {
+    max-height: 100mm;
+  }
   #guide-13 {
     font-size: 8.5pt;
     line-height: 1.55;

@@ -21,12 +21,15 @@ fs.mkdirSync(out, { recursive: true });
   // 编号只存在于本次截图，不进入应用源文件。
   await page.evaluate(() => {
     const points = [
-      [1, 20, 94],
-      [2, 20, 186],
-      [3, 403, 220],
-      [4, 1023, 184],
-      [5, 380, 140],
-    ];
+      [1, '.studio-nav', 8, 5],
+      [2, '.left', 8, 10],
+      [3, '.canvasarea', 220, 45],
+      [4, '.rightpanel', 8, 10],
+      [5, '.canvas-tools', 8, 5],
+    ].map(([number, selector, x, y]) => {
+      const r = document.querySelector(selector).getBoundingClientRect();
+      return [number, r.x + x, r.y + y];
+    });
     for (const [number, left, top] of points) {
       const el = document.createElement('div');
       el.dataset.guideMarker = '';

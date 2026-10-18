@@ -84,7 +84,7 @@ const out = path.dirname(__dirname),
     await page.mouse.move(target.x, target.y, { steps: 7 });
     await page.mouse.up();
     assert.ok((await get()).components.find((c) => c.id === 'K10').geometry.rotation > 50);
-    const resize = await page.locator('[data-handle=resize]').boundingBox();
+    const resize = await page.locator('[data-handle=resize][data-direction=se]').boundingBox();
     const old = (await get()).components.find((c) => c.id === 'K10').geometry.width;
     await page.mouse.move(resize.x + resize.width / 2, resize.y + resize.height / 2);
     await page.mouse.down();

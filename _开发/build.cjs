@@ -35,6 +35,7 @@ const additions =
 const html = fs
   .readFileSync(path.join(__dirname, 'ui.html'), 'utf8')
   .replace('/*__CORE__*/', fs.readFileSync(path.join(__dirname, 'core.js'), 'utf8'))
+  .replace('/*__TRANSFORM__*/', fs.readFileSync(path.join(__dirname, 'transform.js'), 'utf8'))
   .replace('</body>', additions + '</body>');
 fs.writeFileSync(path.join(out, '键盘布局编辑器.html'), html, 'utf8');
 const baseline = C.exportPackage(C.baseline());
