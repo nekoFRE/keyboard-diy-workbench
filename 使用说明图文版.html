@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="guide-source-sha256" content="217dfcf25cab66852ecf28c024201dafed4adb809907684dbf8a642274335dd5"><title>键盘 DIY 工作台 · 图文使用指南</title><style>:root {
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="guide-source-sha256" content="6abfd5e425ef52862433459709e92de8cb71e0b894c3238b00d1ae5b675e589f"><title>键盘 DIY 工作台 · 图文使用指南</title><style>:root {
   color-scheme: light;
   font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
   color: #233e49;
@@ -316,9 +316,9 @@ dialog img {
 }
 </style></head>
 <body><nav class="guide-nav"><strong>键盘 DIY 工作台</strong><p>统一图文使用指南</p><button id="printGuide">打印 / 另存 PDF</button><label class="section-picker">跳到章节<select id="sectionJump"><option value="top">选择阅读章节</option><option value="guide-1">01 · 第一次使用：先记住这条流程</option><option value="guide-2">02 · 认识界面：五个区域</option><option value="guide-3">03 · 拖拽设计：形状与电气分开改</option><option value="guide-4">04 · 检查间距与改版影响</option><option value="guide-5">05 · 教程联动：选对预览来源</option><option value="guide-6">06 · 人工内容与确认：变化后保留并复核</option><option value="guide-7">07 · 保存、导入与恢复不同版本</option><option value="guide-8">08 · 生成制作教程 HTML 与 PDF</option><option value="guide-9">09 · 工程文件与制作交付包</option><option value="guide-10">10 · 可选 AI：离线功能不依赖它</option><option value="guide-11">11 · 尺寸边界、快捷键和常见问题</option><option value="guide-12">12 · 以后交给我或制作方的文件</option><option value="guide-13">附录 · 原始组件与硬件映射</option></select></label><a href="#top">从头阅读</a><a href="#guide-1">01 · 第一次使用：先记住这条流程</a><a href="#guide-2">02 · 认识界面：五个区域</a><a href="#guide-3">03 · 拖拽设计：形状与电气分开改</a><a href="#guide-4">04 · 检查间距与改版影响</a><a href="#guide-5">05 · 教程联动：选对预览来源</a><a href="#guide-6">06 · 人工内容与确认：变化后保留并复核</a><a href="#guide-7">07 · 保存、导入与恢复不同版本</a><a href="#guide-8">08 · 生成制作教程 HTML 与 PDF</a><a href="#guide-9">09 · 工程文件与制作交付包</a><a href="#guide-10">10 · 可选 AI：离线功能不依赖它</a><a href="#guide-11">11 · 尺寸边界、快捷键和常见问题</a><a href="#guide-12">12 · 以后交给我或制作方的文件</a><a href="#guide-13">附录 · 原始组件与硬件映射</a><small>图片可点击放大<br>离线运行 · 无外部资源</small></nav>
-<main id="top" data-guide-source-sha256="217dfcf25cab66852ecf28c024201dafed4adb809907684dbf8a642274335dd5"><h1>键盘 DIY 工作台使用指南</h1>
+<main id="top" data-guide-source-sha256="6abfd5e425ef52862433459709e92de8cb71e0b894c3238b00d1ae5b675e589f"><h1>键盘 DIY 工作台使用指南</h1>
 <p>适用版本：工作台 2.0 · 指南修订：2026-10-18</p>
-<p>本指南统一了原“使用说明”和“升级使用说明”。GitHub 图文、离线 HTML、PDF 以及编辑器内的“使用说明”均来自本文；开发资料另见《维护开发说明》。插图取自实际运行的演示项目，尺寸、版本和哈希仅用于讲解。</p>
+<p>本指南是统一操作说明。GitHub 图文、离线 HTML、PDF 以及编辑器内的“使用说明”均来自本文；旧版说明已清理，开发资料另见《维护开发说明》。插图取自实际运行的演示项目，尺寸、版本和哈希仅用于讲解。</p>
 <section id="guide-1" class="guide-section"><h2>01 · 第一次使用：先记住这条流程</h2>
 <p><strong>打开编辑器 → 调整布局 → 查看实时教程 → 保存完整项目 → 按需生成教程与交付包。</strong></p>
 <ol>
@@ -650,6 +650,6 @@ dialog img {
 <p>四层的完整键码保存在每个组件的 <code>keycodes</code> 中，并可在属性面板查看修改；不是只存 Windows 层。原快捷键按旧源码保留，迁移到当前 QMK 时仍需核对 API 和键码名称。</p>
 <p>GPIO 检查针对记录的信号与 ATmega32U4 通用端口名，不是完整复用、时序、电流能力检查。换主控、总线、特殊输入或扩展层数，需要扩展模型并工程验证，不能只改名称就视为适配。</p>
 <p>布局 JSON 的 <code>design</code> 是当前设计，<code>referenceBaseline</code> 是完整原基准，<code>sourceContext</code> 记录单位与来源，<code>analysis</code> 是导入时重算的派生缓存。Schema 验证通用结构，唯一 ID、行列范围、引脚数组配对和圆形等宽高等跨字段规则由程序额外检查；未知规格用 null，不填猜测值。</p>
-</section><footer>指南正文：使用说明.md<br>源文件 SHA-256：217dfcf25cab66852ecf28c024201dafed4adb809907684dbf8a642274335dd5</footer></main>
+</section><footer>指南正文：使用说明.md<br>源文件 SHA-256：6abfd5e425ef52862433459709e92de8cb71e0b894c3238b00d1ae5b675e589f</footer></main>
 <dialog id="imageViewer"><button id="closeImage">关闭放大图 · Esc</button><img alt="界面截图放大"></dialog>
 <script>document.getElementById('printGuide').onclick=()=>window.print();document.getElementById('sectionJump').onchange=e=>document.getElementById(e.target.value).scrollIntoView({block:'start'});const viewer=document.getElementById('imageViewer');const show=(img)=>{viewer.querySelector('img').src=img.src;viewer.querySelector('img').alt=img.alt;viewer.showModal();};document.querySelectorAll('figure img').forEach(img=>{img.onclick=()=>show(img);img.onkeydown=e=>{if(e.key==='Enter'){show(img);}};});document.getElementById('closeImage').onclick=()=>viewer.close();</script></body></html>
